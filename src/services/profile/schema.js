@@ -15,6 +15,17 @@ const ProfileSchema =  new Schema({
     email:{
         type:String,
         required:true,
+        lowercase:true,
+        validator: async(value)=>{
+            if(!v.isEmail(value)){
+                throw new Error("Email is invalid")
+            }else{
+                const checkEmail = await ProfilesModel.findOne({email:value})
+                if(checkEmail){
+                    throw new Error ("Email already exists")
+                }
+            }
+        }
     },
     bio:{
         type:String,
