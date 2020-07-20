@@ -8,7 +8,7 @@ const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
 
-const experienceRouter = require("./services/experinece")
+const experienceRouter = require("./src/services/experinece")
 
 const cors = require("cors")
 server.use("/experinece", experienceRouter)
@@ -20,7 +20,7 @@ server.use("/experinece", experienceRouter)
 // } = require("./errorHandling")
 
 const server = express()
-server.use(express.static(join(__dirname, `../public`)))
+server.use(express.static(join(__dirname, `../src`)))
 
 const port = process.env.PORT
 
