@@ -1,7 +1,7 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
 
-const profileSchema =  new Schema({
+const ProfileSchema =  new Schema({
     _id:String,
     name:String,
     surname:String,
@@ -16,5 +16,5 @@ const profileSchema =  new Schema({
         
 })
 
-const profileModel = mongoose.model("Profile", profileSchema)
-module.exports = profileModel
+const ProfilesModel = mongoose.model("Profile", ProfileSchema)
+module.exports = ProfilesModel
