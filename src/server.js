@@ -8,7 +8,7 @@ const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
 
-const experienceRouter = require("./src/services/experience")
+const experienceRouter = require("./services/experience")
 
 const cors = require("cors")
 
