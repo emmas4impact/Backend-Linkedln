@@ -7,7 +7,11 @@ const mongoose = require("mongoose")
 const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
+
+const experienceRouter = require("./services/experinece")
+
 const cors = require("cors")
+server.use("/experinece", experienceRouter)
 // const {
 //   notFoundHandler,
 //   unauthorizedHandler,
