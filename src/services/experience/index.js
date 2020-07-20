@@ -1,7 +1,7 @@
 const express = require("express")
 
 const ExperienceSchema = require("./schema")
-const {check, body, validationResult} = require("express-validator");
+
 const experienceRouter = express.Router()
 
 experienceRouter.get("/", async (req, res, next) => {
@@ -15,8 +15,8 @@ experienceRouter.get("/", async (req, res, next) => {
 
 experienceRouter.get("/:id", async (req, res, next) => {
   try {
-    const id = req.params._id
-    const experience = await ExperienceSchema.findById(_id)
+    const id = req.params.id
+    const experience = await ExperienceSchema.findById(id)
     if (experience) {
       res.send(experience)
     } else {

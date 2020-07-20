@@ -8,10 +8,10 @@ const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
 
-const experienceRouter = require("./src/services/experinece")
+const experienceRouter = require("./src/services/experience")
 
 const cors = require("cors")
-server.use("/experinece", experienceRouter)
+
 // const {
 //   notFoundHandler,
 //   unauthorizedHandler,
@@ -28,9 +28,11 @@ const loggerMiddleware = (req, res, next) => {
   console.log(`Logged ${req.url} ${req.method} -- ${new Date()}`)
   next()
 }
+
 server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
+server.use("/experience", experienceRouter)
 
 // ROUTES
 // server.use("/products", loggerMiddleware, productRouter)
@@ -52,8 +54,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(
-    server.listen(port, () => {
-      console.log("Running on port", port)
+    server.listen(2250, () => {
+      console.log("Running on port", 2250)
     })
   )
   .catch((err) => console.log(err))

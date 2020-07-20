@@ -2,9 +2,7 @@ const { Schema } = require("mongoose")
 const mongoose = require("mongoose")
 
 const ExperienceSchema = new Schema({
-  _id: {
-    type: ObjectIdSchema,
-  },
+  
   role: {
     type: String,
     required: true,
@@ -33,18 +31,10 @@ const ExperienceSchema = new Schema({
     type: String,
     required: true,
   },
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-  updatedAt: {
-    type: Date,
-    required: true,
-  },
   image: {
       type: String,
       required: true
   }
-})
+},{timestamps: true})
 
 module.exports = mongoose.model("experience", ExperienceSchema)
