@@ -57,7 +57,7 @@ server.use("/api/experience", experienceRouter)
 console.log(listEndpoints(server))
 server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 mongoose
-  .connect(process.env.DBCONNECTION, {
+  .connect("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
