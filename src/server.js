@@ -25,7 +25,7 @@ const cors = require("cors")
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
 server.use(helmet());
-const port = process.env.PORT
+const port = process.env.PORT || 2250
 
 const loggerMiddleware = (req, res, next) => {
   console.log(`Logged ${req.url} ${req.method} -- ${new Date()}`)
