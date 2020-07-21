@@ -49,7 +49,7 @@ experienceRouter.post("/",
    }
 })
 
-postRouter.post("/:id/upload", upload.single("experience"), async (req, res, next) => {
+experienceRouter.post("/:id/upload", upload.single("experience"), async (req, res, next) => {
   try {
     await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
     req.body = {
