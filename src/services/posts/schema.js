@@ -17,48 +17,24 @@ const { text } = require("body-parser");
 //   quantity: Number,
 // })
 const PostSchema = new Schema({
-    name: {
+    text: {
       type: String,
       required: true,
-    },
-    surname: {
-        type: String,
-        required: true,
-      },
-    email: {
-      type: String,
-      required: true,
-    },
-    
-   bio: {
-      type: String,
-      required: true,
-     
-    },
-    title: {
-        type: String,
-        required: true,
-      },
-      area: {
-        type: String,
-        required: true,
-      },
-    image: {
-        type: String
-        
-    },
-    username: {
-      type: String,
-      required: true,
-      unique: true
-  },
+    },  
+//     username: {
+//       type: String,
+//       required: true,
+//       unique: true
+//   },
   
  
-  profiles: [{
-        type: mongoose.Schema.Types.String, ref: 'profiles',
+  user: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'profile',
        
     }],
-  
+  image:{
+    type: String,
+  }
     
   },{ timestamps: true })
   
@@ -68,7 +44,7 @@ const PostSchema = new Schema({
     next();
   });
   PostSchema.static("postProfile", async function(postId){
-    const post = await postModel.findOne({_id: postId}).populate("profiles");
+    const post = await postModel.findOne({_id: postId}).populate("profile");
     return  post ;
 });
 
