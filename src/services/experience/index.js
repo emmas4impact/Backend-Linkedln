@@ -56,7 +56,7 @@ postRouter.post("/:id/upload", upload.single("experience"), async (req, res, nex
       image: `${req.params.id}.png`
     }
     
-    const post =await postModel.findByIdAndUpdate(req.params.id, req.body)
+    const post =await ExperienceSchema.findByIdAndUpdate(req.params.id, req.body)
     if(post){
         res.send("image uploaded")
     }
