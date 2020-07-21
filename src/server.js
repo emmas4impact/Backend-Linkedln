@@ -1,14 +1,15 @@
 const express = require("express")
 const listEndpoints = require("express-list-endpoints")
-
+const profileRouter = require("./services/profile")
+const experienceRouter = require("./services/experience")
+const postRoute = require("./services/posts")
+const path = require("path")
 
 const mongoose = require("mongoose")
-
 const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
 
-const experienceRouter = require("./services/experience")
 
 const cors = require("cors")
 
@@ -20,7 +21,7 @@ const cors = require("cors")
 // } = require("./errorHandling")
 
 const server = express()
-server.use(express.static(join(__dirname, `../src`)))
+// server.use(express.static(join(__dirname, `../src`)))
 
 const port = process.env.PORT
 
@@ -32,8 +33,12 @@ const loggerMiddleware = (req, res, next) => {
 server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
-server.use("/experience", experienceRouter)
 
+server.use(express.static(path.join(__dirname, `../public`)))
+server.use("/posts", postRoute)
+
+server.use("/api/profile", profileRouter)
+server.use("/api/experience", experienceRouter)
 // ROUTES
 // server.use("/products", loggerMiddleware, productRouter)
 // server.use("/reviews",loggerMiddleware, reviewRouter )
@@ -61,8 +66,10 @@ mongoose
         }
     })
   .then(
-    server.listen(2250, () => {
-      console.log("Running on port", 2250)
+    server.listen(port, () => {
+      console.log("Running on port", port)
     })
   )
   .catch((err) => console.log(err))
+
+
