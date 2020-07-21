@@ -4,25 +4,254 @@ info:
   description: Linkedln-Backend API
   version: 1.0.0
 servers:
-  - url: http://localhost:2250
+  - url: http://localhost:3001
     description: Local server
-  - url:
+  - url: https://linkedln-backend.herokuapp.com
     description: Cloud server
 tags:
   - name: profile
-    description: Operations about user profile
-  - name: Experience
-    description: Operation about user work experience
+    description: List of user profile
+  - name: experience
+    description: work experiences based on user profiles
   - name: posts
-    description: Operation about user posts
-  
+    description: work posts based on user profiles
 paths:
-  /api/profile:
+  /api/profiles:
     get:
-      tags: 
-        - profile
+      tags:
+        - profiles
+      summary: Returns a list of user profiles.
+      description: list of student and their basic info
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          description: Filter profile list by username
+      responses:
+        "200": # status code
+          description: A list of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/Profile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - Profile
+      description: Adds a new book
+      requestBody:
+        description: The object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Profile"
+      responses:
+        "201": # status code
+          description: The ID of the newly created book
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/Profile/{id}:
+    get:
+      tags:
+        - Profile
+      summary: blabla
+      description: Retrieve single Profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Book to retrieve
+      responses:
+        "200": # status code
+          description: The single Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - Profile
+      description: Update an existing Profile
+      summary: Update
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Book to update
+      requestBody:
+        description: Fields to update
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Profile"
+      responses:
+        "200": # status code
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Profile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - Profile
+      description: Delete a specific Book by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Book to delete
+      responses:
+        "200": # status code
+          description: The single Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /Profile/upload:
+    post:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200": # status code
+          description: The single user
+          content:
+            application/json:
+              "404":
+          $ref: "#/components/responses/NotFound"
+  /Profile/export/csv:
+    get:
+      tags:
+        - Profile
       responses:
         "200":
-          description: Cloud server
-            
-   
+          description: OK
+          content:
+            text/csv:
+              example: asin, title, price, category
+  /experience/{name}/download:
+    get:
+      tags:
+        - experience
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            img/png:
+              example: >
+components:
+  responses:
+    NotFound:
+      description: The specific resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: Bearer token missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Profile:
+      type: object
+      properties:
+        name:
+          type: string
+           
+        surname:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+          
+        title:
+          type: string
+        area:
+          type: string
+        image:
+          type: string
+        username:
+          type: string
+ 
+    experience:
+      type: object
+      properties:
+        role:
+          type: string
+           
+        company:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+          
+        descrition:
+          type: string
+        area:
+          type: string
+        image:
+          type: string
+        username:
+          type: string
+          
+    post:
+      type: object
+      properties:
+        text:
+          type: string
+           
+        username:
+          type: string
+        user:
+          type: object
+        image:
+          type: string
+        
+        
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
