@@ -3,6 +3,7 @@ const cors = require("cors")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require ("mongoose")
 const dotenv = require("dotenv")
+const {join} =require("path")
 const profileRouter = require("../src/services/profile")
 const morgan = require("morgan")
 //const logger = require("../src/services/middleware")
@@ -18,6 +19,8 @@ const {
 const port = process.env.PORT || 3015
 
 const server = express()
+const staticFolderPath = join(__dirname, "./public")
+server.use(express.static(staticFolderPath))
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development'){
@@ -44,5 +47,6 @@ mongoose
 
 )
 .catch((err)=> console.log(err))
+
 
 

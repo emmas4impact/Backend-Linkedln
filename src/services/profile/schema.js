@@ -7,6 +7,9 @@ const ProfileSchema =  new Schema({
     name:{
         type:String,
         required:true,
+        unique:true,
+        trim:true,
+    
     },
     surname:{
       type:String,
@@ -15,10 +18,12 @@ const ProfileSchema =  new Schema({
     email:{
         type:String,
         required:true,
+        match:[]
     },
     bio:{
         type:String,
-        required:true,
+        required:[true, 'please add a bio'],
+        maxlength:[500, 'Bio cannot be more than 500 characters']
     },
     title:{
         type:String,

@@ -1,7 +1,9 @@
 const express = require ("express")
 const ProfilesModel = require("./schema")
 const q2m = require("query-to-mongo")
-
+const multer = require("multer")
+const path = require("path")
+const fs = require("fs-extra")
 const profileRouter = express.Router()
 
 // get profiles
@@ -64,6 +66,32 @@ profileRouter.post("/", async(req,res,next)=>{
         next(error)
     }
 })
+
+// post an image
+const upload = multer({})
+const imageFilePath = path.join(__dirname, "../../public/img")
+profileRouter.post("/:username/upload", upload.single("profile"), async (req,res,next)=>{
+    try{
+        if(req.file){
+            await fs.writeFile(
+                path.join(imageFilePath, `${req.params.username}.png`),
+                req.file.buffer);
+                const profile = await ProfilesModel.findByIdAndUpdate(req.params.username, {
+                    image:`http://127.0.0.1:${process.env.PORT}/img/profile/${req.params.username}.png`,
+                });
+                res.status(200).send("uploaded")
+        }else{
+            const error = new Error()
+            error.httpstatusCode=400;
+            error.message= "image file is missing"
+            next(error)
+        }
+
+    }catch(error){
+        next(error)
+    }
+})
+
 
 // update a new profile
 profileRouter.put("/:id", async(req,res,next)=>{
