@@ -6,6 +6,7 @@ const path =require("path")
 const fs =require("fs-extra")
 const postRouter = express.Router()
 const pdfPrinter = require("pdfmake")
+const q2m = require("query-to-mongo")
 const port = process.env.PORT
 const imagePath = path.join(__dirname, "../../../public/images/post");
 console.log(imagePath)
@@ -16,7 +17,11 @@ const upload = multer({});
 
 postRouter.get("/", async (req, res, next) => {
   try {
-    const post = await postModel.find(req.query).populate("profiles")
+    const parsedQuery = q2m(req.query)
+    const post = await postModel.find(parsedQuery.criteria, parsedQuery.options.fields).populate("profiles")
+    .sort(parsedQuery.options.sort)
+    .limit(parsedQuery.options.limit).skip(parsedQuery.options.skip)
+    //const post = await postModel.find(req.query).populate("profiles")
     res.send(post)
   } catch (error) {
     next(error)

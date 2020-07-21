@@ -29,7 +29,7 @@ const PostSchema = new Schema({
   
  
   user: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'profiles',
+        type: mongoose.Schema.Types.ObjectId, ref: 'profile',
        
     }],
   image:{

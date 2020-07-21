@@ -1,0 +1,28 @@
+openapi: 3.0.1
+info:
+  title: Linkedln-Backend API
+  description: Linkedln-Backend API
+  version: 1.0.0
+servers:
+  - url: http://localhost:2250
+    description: Local server
+  - url:
+    description: Cloud server
+tags:
+  - name: profile
+    description: Operations about user profile
+  - name: Experience
+    description: Operation about user work experience
+  - name: posts
+    description: Operation about user posts
+  
+paths:
+  /api/profile:
+    get:
+      tags: 
+        - profile
+      responses:
+        "200":
+          description: Cloud server
+            
+   

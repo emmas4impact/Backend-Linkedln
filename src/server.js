@@ -4,7 +4,9 @@ const profileRouter = require("./services/profile")
 const experienceRouter = require("./services/experience")
 const postRoute = require("./services/posts")
 const path = require("path")
-
+const helmet = require("helmet")
+const swaggerUi = require('swagger-ui-express');
+const YAML = require("yamljs")
 const mongoose = require("mongoose")
 const {join}= require("path")
 
@@ -20,9 +22,9 @@ const cors = require("cors")
 //   catchAllHandler,
 // } = require("./errorHandling")
 
-const server = express()
+const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
-
+server.use(helmet());
 const port = process.env.PORT
 
 const loggerMiddleware = (req, res, next) => {
@@ -30,6 +32,7 @@ const loggerMiddleware = (req, res, next) => {
   next()
 }
 
+const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
@@ -52,7 +55,7 @@ server.use("/api/experience", experienceRouter)
 // server.use(catchAllHandler)
 
 console.log(listEndpoints(server))
-
+server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 mongoose
   .connect("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
     useNewUrlParser: true,

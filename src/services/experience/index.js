@@ -3,6 +3,7 @@ const multer = require("multer")
 const path =require("path")
 const fs =require("fs-extra")
 const ExperienceSchema = require("./schema")
+const json2csv = require('json2csv');
 
 const experienceRouter = express.Router()
 const imagePath = path.join(__dirname, "../../../public/images/experience");
@@ -49,11 +50,29 @@ experienceRouter.post("/",
    }
 })
 
+experienceRouter.post("/csv", async (req, res, next) => {
+  try {
+   
+    const newExperience = new ExperienceSchema(req.body)
+     const { _id } = await newExperience.save()
+     //res.status(201).send(_id)
+     
+     const json2csv = new Transform( {fields:['_id', 'role', 'company', 'startDate', 'endDate', 'description', 'area','username','image', 'createdAt','updatedAt']})
+     const fieldNames =['_id', 'role', 'company', 'startDate', 'endDate', 'description', 'area','username','image', 'createdAt','updatedAt']
+     const data =json2csv({data: newExperience, fields: fields, fieldNames: fieldNames}) 
+     res.attachment('filename.csv');
+     res.status(200).send(data);
+   } catch (error) {
+     next(error)
+   }
+})
+
+
 experienceRouter.post("/:id/upload", upload.single("experience"), async (req, res, next) => {
   try {
     await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
     req.body = {
-      image: `${req.params.id}.png`
+      image: `http://127.0.0.1:${port}/images/experience${req.params.id}.png`
     }
     
     const post =await ExperienceSchema.findByIdAndUpdate(req.params.id, req.body)
