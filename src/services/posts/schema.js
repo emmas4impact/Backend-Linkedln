@@ -29,7 +29,7 @@ const PostSchema = new Schema({
   
  
   user: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'profile',
+        type: mongoose.Schema.Types.ObjectId, ref: 'profiles',
        
     }],
   image:{
@@ -44,18 +44,18 @@ const PostSchema = new Schema({
     next();
   });
   PostSchema.static("postProfile", async function(postId){
-    const post = await postModel.findOne({_id: postId}).populate("profile");
+    const post = await postModel.findOne({_id: postId}).populate("profiles");
     return  post ;
 });
 
-PostSchema.post("validate", function (error, doc, next) {
-    if (error) {
-      error.httpStatusCode = 400;
-      next(error);
-    } else {
-      next();
-    }
-  });
+// PostSchema.post("validate", function (error, doc, next) {
+//     if (error) {
+//       error.httpStatusCode = 400;
+//       next(error);
+//     } else {
+//       next();
+//     }
+//   });
   
   PostSchema.post("save", function (error, doc, next) {
     if (error.name === "MongoError" && error.code === 11000) {
