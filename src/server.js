@@ -54,10 +54,6 @@ const corsOptions = {
   }
 
   server.use(cors(corsOptions))
-// ROUTES
-// server.use("/products", loggerMiddleware, productRouter)
-// server.use("/reviews",loggerMiddleware, reviewRouter )
-// server.use("/customers",loggerMiddleware, customerRouter)
 
 // // ERROR HANDLERS
 
