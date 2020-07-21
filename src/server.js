@@ -50,7 +50,7 @@ server.use("/api/experience", experienceRouter)
 console.log(listEndpoints(server))
 
 mongoose
-  .connect("mongodb://localhost:27017/Linkedln-API", {
+  .connect("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

@@ -1,6 +1,5 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
-const v = require("validator")
 
 const ProfileSchema =  new Schema({
     _id:String,
