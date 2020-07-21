@@ -6,7 +6,7 @@ const postRouter = express.Router()
 
 postRouter.get("/", async (req, res, next) => {
   try {
-    const post = await PostSchema.find(req.query)
+    const post = await PostSchema.find(req.query).populate("profiles")
     res.send(post)
   } catch (error) {
     next(error)
