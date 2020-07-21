@@ -36,9 +36,14 @@ const ProfileSchema =  new Schema({
         type:String,
         required:true,
     },
-    
-        
-}, {timestamps:true})
+    createdAt:{
+        type:Date, default: Date.now
+    },
+    updatedAt: {
+        type:Date, default:Date.now
+    }
+       
+})
 
 const ProfilesModel = mongoose.model("Profile", ProfileSchema)
 module.exports = ProfilesModel
