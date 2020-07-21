@@ -76,7 +76,7 @@ profileRouter.post("/:username/upload", upload.single("profile"), async (req,res
             await fs.writeFile(
                 path.join(imageFilePath, `${req.params.username}.png`),
                 req.file.buffer);
-                const profile = await ProfilesModel.findByIdAndUpdate(req.params.username, {
+                const profile = await ProfilesModel.findOneAndUpdate(req.params.username, {
                     image:`http://127.0.0.1:${process.env.PORT}/img/profile/${req.params.username}.png`,
                 });
                 res.status(200).send("uploaded")

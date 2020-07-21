@@ -4,6 +4,7 @@ const v = require("validator")
 
 const ProfileSchema =  new Schema({
     _id:String,
+
     name:{
         type:String,
         required:true,
@@ -18,7 +19,16 @@ const ProfileSchema =  new Schema({
     email:{
         type:String,
         required:true,
-        match:[]
+        validator: async(value)=>{
+            if(!v.isEmail(value)){
+                throw new Error("Email is invalid")
+            }else{
+                const checkEmail = await ProfilesModel.findOne({email:value})
+                if(checkEmail){
+                    throw new Error ("Email already exists")
+                }
+            }
+        }
     },
     bio:{
         type:String,
