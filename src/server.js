@@ -1,13 +1,10 @@
 const express = require("express")
 const listEndpoints = require("express-list-endpoints")
-
-
 const mongoose = require("mongoose")
-
 const {join}= require("path")
 
 //const problematicRoutes = require("./service/ProblematicRoutes")
-
+const postRoute = require("./services/posts")
 const experienceRouter = require("./services/experience")
 
 const cors = require("cors")
@@ -33,6 +30,7 @@ server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
 server.use("/experience", experienceRouter)
+server.use("/posts", postRoute)
 
 // ROUTES
 // server.use("/products", loggerMiddleware, productRouter)
