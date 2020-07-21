@@ -36,8 +36,8 @@ profileRouter.get("/:username", async(req,res,next)=>{
 // create a new profile
 profileRouter.post("/", async(req,res,next)=>{
     try{
-        const newProfile = await new ProfilesModel(req.body)
-        const response = newProfile.save()
+        const newProfile = new ProfilesModel(req.body)
+        const response = await newProfile.save()
         res.status(201).send(response)
 
     }catch(error){

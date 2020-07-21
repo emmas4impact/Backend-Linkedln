@@ -17,11 +17,11 @@ const upload = multer({});
 
 postRouter.get("/", async (req, res, next) => {
   try {
-    const parsedQuery = q2m(req.query)
-    const post = await postModel.find(parsedQuery.criteria, parsedQuery.options.fields).populate("profiles")
-    .sort(parsedQuery.options.sort)
-    .limit(parsedQuery.options.limit).skip(parsedQuery.options.skip)
-    //const post = await postModel.find(req.query).populate("profiles")
+    // const parsedQuery = q2m(req.query)
+    // const post = await postModel.find(parsedQuery.criteria, parsedQuery.options.fields).populate("profile")
+    // .sort(parsedQuery.options.sort)
+    // .limit(parsedQuery.options.limit).skip(parsedQuery.options.skip)
+    const post = await postModel.find(req.query).populate("user")
     res.send(post)
   } catch (error) {
     next(error)

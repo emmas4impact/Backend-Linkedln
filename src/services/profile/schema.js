@@ -2,7 +2,7 @@ const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
 
 const ProfileSchema =  new Schema({
-    _id:String,
+    
     name:{
         type:String,
         required:true,
@@ -45,10 +45,11 @@ const ProfileSchema =  new Schema({
     username:{
         type:String,
         required:true,
+        
     },
     
         
 }, {timestamps:true})
 
 const ProfilesModel = mongoose.model("Profile", ProfileSchema)
-module.exports = ProfilesModel
+module.exports = ProfilesModel;

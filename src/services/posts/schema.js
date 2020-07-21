@@ -1,7 +1,7 @@
 const { Schema } = require("mongoose")
 const mongoose = require("mongoose")
+const {profile} = require("../profile/schema")
 
-const { text } = require("body-parser");
 
 // const PostProfileSchema = new Schema({
 //   _id: String,
@@ -21,17 +21,14 @@ const PostSchema = new Schema({
       type: String,
       required: true,
     },  
-//     username: {
-//       type: String,
-//       required: true,
-//       unique: true
-//   },
+
   
  
-  user: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'profile',
+  user: {
+        type: Schema.Types.ObjectId, 
+        ref: 'Profile',
        
-    }],
+    },
   image:{
     type: String,
   }
@@ -43,10 +40,10 @@ const PostSchema = new Schema({
     this.updatedAt=Date.now();
     next();
   });
-  PostSchema.static("postProfile", async function(postId){
-    const post = await postModel.findOne({_id: postId}).populate("profiles");
-    return  post ;
-});
+//   PostSchema.static("postProfile", async function(postId){
+//     const post = await postModel.findOne({_id: postId}).populate("profiles");
+//     return  post ;
+// });
 
 // PostSchema.post("validate", function (error, doc, next) {
 //     if (error) {
