@@ -1,8 +1,13 @@
 const express = require("express")
-
+const multer = require("multer")
+const path =require("path")
+const fs =require("fs-extra")
 const ExperienceSchema = require("./schema")
 
 const experienceRouter = express.Router()
+const imagePath = path.join(__dirname, "../../../public/images/experience");
+console.log(imagePath)
+const upload = multer({});
 
 experienceRouter.get("/", async (req, res, next) => {
   try {
@@ -42,6 +47,23 @@ experienceRouter.post("/",
    } catch (error) {
      next(error)
    }
+})
+
+postRouter.post("/:id/upload", upload.single("experience"), async (req, res, next) => {
+  try {
+    await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
+    req.body = {
+      image: `${req.params.id}.png`
+    }
+    
+    const post =await postModel.findByIdAndUpdate(req.params.id, req.body)
+    if(post){
+        res.send("image uploaded")
+    }
+    
+  } catch (error) {
+    next(error)
+  }
 })
  
 experienceRouter.put("/:id", async (req, res, next) => {
