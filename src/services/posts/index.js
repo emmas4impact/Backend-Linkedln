@@ -1,6 +1,6 @@
 const express = require("express")
 const multer = require("multer")
-//const PostSchema = require("./schema")
+// const PostSchema = require("./schema")
 const postModel = require("./schema")
 const path =require("path")
 const fs =require("fs-extra")

@@ -3,7 +3,7 @@ const listEndpoints = require("express-list-endpoints")
 const profileRouter = require("./services/profile")
 const experienceRouter = require("./services/experience")
 const postRoute = require("./services/posts")
-
+const path = require("path")
 
 const mongoose = require("mongoose")
 const {join}= require("path")
@@ -34,6 +34,7 @@ server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
 
+server.use(express.static(path.join(__dirname, `../public`)))
 server.use("/posts", postRoute)
 
 server.use("/api/profile", profileRouter)
