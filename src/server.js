@@ -33,7 +33,7 @@ const loggerMiddleware = (req, res, next) => {
 }
 
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
-server.use(cors())
+
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
 
@@ -42,6 +42,18 @@ server.use("/posts", postRoute)
 
 server.use("/api/profile", profileRouter)
 server.use("/api/experience", experienceRouter)
+const whitelist = ["http://localhost:3000", "http://localhost:3001"]
+const corsOptions = {
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+  }
+
+  server.use(cors(corsOptions))
 // ROUTES
 // server.use("/products", loggerMiddleware, productRouter)
 // server.use("/reviews",loggerMiddleware, reviewRouter )
