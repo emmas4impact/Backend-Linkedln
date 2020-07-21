@@ -33,8 +33,8 @@ const loggerMiddleware = (req, res, next) => {
 server.use(cors())
 server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
-server.use("/profile", profileRouter)
-server.use("/experience", experienceRouter)
+server.use("/api/profile", profileRouter)
+server.use("/api/experience", experienceRouter)
 // ROUTES
 // server.use("/products", loggerMiddleware, productRouter)
 // server.use("/reviews",loggerMiddleware, reviewRouter )
