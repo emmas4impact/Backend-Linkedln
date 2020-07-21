@@ -8,7 +8,8 @@ const profileRouter = express.Router()
 profileRouter.get("/", async(req,res,next)=>{
     try{
         const profiles = await ProfilesModel.find(req.query)
-        res.send(profiles)
+        // res.send(profiles)
+        res.send({profiles, Total: profiles.length})
 
     }catch(error){
         next(error)
