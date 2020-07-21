@@ -49,10 +49,17 @@ server.use("/experience", experienceRouter)
 console.log(listEndpoints(server))
 
 mongoose
-  .connect("mongodb://localhost:27017/Linkedln-API", {
+  .connect("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+    useUnifiedTopology: true
+  }, function(err) {
+    
+        if(err) {
+            console.log('Some problem with the connection ' +err);
+        } else {
+            console.log('The Mongoose connection is ready');
+        }
+    })
   .then(
     server.listen(2250, () => {
       console.log("Running on port", 2250)
