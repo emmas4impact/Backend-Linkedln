@@ -112,6 +112,7 @@ postRouter.post("/pdf", async(req, res, next)=>{
         const newpost = new postModel(req.body)
         console.log(newpost)
         const { _id } = await newpost.save()
+      
         res.status(201).send(_id)
        
          const doc = new PDFDocument();  
