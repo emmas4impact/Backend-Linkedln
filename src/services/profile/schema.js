@@ -59,7 +59,8 @@ const ProfileSchema =  new Schema({
     updatedAt: {
         type:Date,
         default:Date.now
-    }
+    },
+    
        
 })
 

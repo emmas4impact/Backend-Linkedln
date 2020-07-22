@@ -9,6 +9,7 @@ const ExperienceModel = require("../experience/schema");
 //const doc = new pdfdocument();
 const { json } = require("express");
 const pdfdocument = require("pdfkit");
+const { profile } = require("console")
 
 const profileRouter = express.Router()
 
@@ -60,6 +61,122 @@ profileRouter.get("/:username", async(req,res,next)=>{
     }
     
 })
+
+// get profiles with experience
+profileRouter.get("/:username/experiences", async (req, res, next) => {
+    try {
+      const username = req.params.username
+      const experience = await ExperienceModel.findOne({username:username})
+      if (experience) {
+        res.send(experience)
+      } else {
+        const error = new Error()
+        error.httpStatusCode = 404
+        next(error)
+      }
+    } catch (error) {
+      console.log(error)
+      next("While reading experience list a problem occurred!")
+    }
+  })
+// create a new profile with experience
+profileRouter.post("/:username/experiences",async (req, res, next) => {
+  try {
+   
+    const newExperience = new ExperienceModel(req.body)
+     const response = await newExperience.save()
+     res.status(201).send(response)
+     
+   } catch (error) {
+     next(error)
+   }
+})
+
+// get a specific experience for a particular user
+profileRouter.get("/:username/experiences/:expId", async (req, res, next) => {
+    try {
+      const findUserExp = await ExperienceModel.findOne(
+        {
+          username: req.params.username,
+          expId: req.params.id,
+        },
+        
+      );
+      if (findUserExp) {
+          res.status(200).send(findUserExp)
+      }else{
+       res.status(404).send("Not found")
+      };
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // update a particular experience
+ 
+profileRouter.put("/:username/experiences/:expId", async (req, res, next) => {
+    try {
+      delete req.body.username;
+  
+      const updateExperience = await ExperienceModel.findOneAndUpdate(
+        {
+          username: req.params.username,
+          expId: req.params.id,
+        },
+        req.body
+      );
+      if (updateExperience) {
+          res.status(200).send("Updated")
+      }
+      else {
+          res.status(404).send("Request not successful")
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // delete  experience for a specific user
+  profileRouter.delete("/:username/experiences/:expId", async (req, res, next) => {
+    try {
+      const delExp = await ExperienceModel.findOneAndDelete({
+        username: req.params.username,
+        expId: req.params.id,
+      });
+  
+      if (delExp) { 
+        res.status(200).send("Deleted");
+      } else res.status(400).send("Bad request");
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // post pic for an experience
+ const uploaded = multer({})
+  profileRouter.post(
+    "/:username/experiences/:expId/picture",
+    uploaded.single("picture"),
+    async (req, res, next) => {
+      try {
+        await fs.writeFile(
+          join(imageFilePath, `${req.params.id}.png`),
+          req.file.buffer
+        );
+  
+        const savePicture = await ExperienceModel.findByIdAndUpdate(
+          { expId: req.params.id },
+          {
+            image: `http://localhost:${process.env.PORT}/img/experiences/${req.params.id}.png`,
+          }
+        );
+        if (savePicture) res.status(201).send("Uploaded");
+        else res.status(400).send("Something went wrong");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  );
 
 // create a new profile
 profileRouter.post("/", async(req,res,next)=>{
