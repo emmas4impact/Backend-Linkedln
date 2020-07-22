@@ -15,12 +15,12 @@ const {join}= require("path")
 
 const cors = require("cors")
 
-// const {
-//   notFoundHandler,
-//   unauthorizedHandler,
-//   forbiddenHandler,
-//   catchAllHandler,
-// } = require("./errorHandling")
+const {
+  notFoundHandler,
+  unauthorizedHandler,
+  forbiddenHandler,
+  catchAllHandler,
+} = require("./errorHandling")
 
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
@@ -34,11 +34,25 @@ const loggerMiddleware = (req, res, next) => {
 
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 
-server.use(express.json()) // Built in middleware
-server.use(loggerMiddleware)
+const server = express()
+const staticFolderPath = join(__dirname, "../public")
+server.use(express.static(staticFolderPath))
+
+// Dev logging middleware
+if (process.env.NODE_ENV === 'development'){
+  server.use(morgan('dev'))
+}
+server.use(cors())
+server.use(express.json())
+
+
+server.use(notFoundHandler)
+server.use(badRequestHandler)
+server.use(genericErrorHandler)
+//server.use(logger)
 
 server.use(express.static(path.join(__dirname, `../public`)))
-server.use("/posts", postRoute)
+server.use("/api/posts", postRoute)
 
 server.use("/api/profile", profileRouter)
 server.use("/api/experience", experienceRouter)
@@ -65,15 +79,16 @@ const corsOptions = {
 console.log(listEndpoints(server))
 server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 mongoose
-  .connect("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(
+.connect ("mongodb+srv://oksana:ksena161997@cluster0.5shb2.mongodb.net/Linkedln-API", {
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
+})
+.then(
     server.listen(port, () => {
       console.log("Running on port", port)
     })
   )
   .catch((err) => console.log(err))
+
 
 
