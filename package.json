@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -r dotenv/config ./src/server.js",
     "start": "node ./src/server.js"
-
   },
   "repository": {
     "type": "git",
@@ -27,11 +26,13 @@
     "express-list-endpoints": "^5.0.0",
     "express-validator": "^6.6.0",
     "fs-extra": "^9.0.1",
+    "helmet": "^3.23.3",
     "json2csv": "^5.0.1",
     "mongoose": "^5.9.25",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "nodemon": "^2.0.4",
+    "pdfkit": "^0.11.0",
     "query-to-mongo": "^0.10.1",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"

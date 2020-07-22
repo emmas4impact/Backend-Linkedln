@@ -16,11 +16,11 @@ const {join}= require("path")
 const cors = require("cors")
 
 const {
+  badRequestHandler,
   notFoundHandler,
-  unauthorizedHandler,
-  forbiddenHandler,
-  catchAllHandler,
-} = require("./errorHandling")
+  genericErrorHandler,
+  
+} = require("./errorHandler.js")
 
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
@@ -34,7 +34,7 @@ const loggerMiddleware = (req, res, next) => {
 
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 
-const server = express()
+
 const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
 
@@ -53,7 +53,6 @@ server.use(genericErrorHandler)
 
 server.use(express.static(path.join(__dirname, `../public`)))
 server.use("/api/posts", postRoute)
-
 server.use("/api/profile", profileRouter)
 server.use("/api/experience", experienceRouter)
 const whitelist = ["http://localhost:3000", "http://localhost:3001"]

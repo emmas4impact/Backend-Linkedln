@@ -6,7 +6,7 @@ const path = require("path")
 const fs = require("fs-extra")
 const json2csv = require("json2csv");
 const ExperienceModel = require("../experience/schema");
-const doc = new pdfdocument();
+//const doc = new pdfdocument();
 const { json } = require("express");
 const pdfdocument = require("pdfkit");
 
