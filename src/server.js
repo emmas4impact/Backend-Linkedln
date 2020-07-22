@@ -15,12 +15,11 @@ const {join}= require("path")
 
 const cors = require("cors")
 
-// const {
-//   notFoundHandler,
-//   unauthorizedHandler,
-//   forbiddenHandler,
-//   catchAllHandler,
-// } = require("./errorHandling")
+const {
+    badRequestHandler,
+    notFoundHandler,
+    genericErrorHandler,
+} = require("../src/errorHandler")
 
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
@@ -45,7 +44,7 @@ server.use("/api/experience", experienceRouter)
 const whitelist = ["http://localhost:3000", "http://localhost:3001"]
 const corsOptions = {
     origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
+      if (whitelist.indexOf(origin) !== 1) {
         callback(null, true)
       } else {
         callback(new Error("Not allowed by CORS"))
@@ -57,10 +56,10 @@ const corsOptions = {
 
 // // ERROR HANDLERS
 
-// server.use(notFoundHandler)
-// server.use(unauthorizedHandler)
-// server.use(forbiddenHandler)
-// server.use(catchAllHandler)
+//server.use(notFoundHandler)
+server.use(notFoundHandler)
+server.use(badRequestHandler)
+server.use(genericErrorHandler)
 
 console.log(listEndpoints(server))
 server.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
