@@ -1,6 +1,6 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
-const v = require("validator")
+//const v = require("validator")
 
 const ProfileSchema =  new Schema({
    
@@ -19,16 +19,16 @@ const ProfileSchema =  new Schema({
     email:{
         type:String,
         required:true,
-        validator: async(value)=>{
-            if(!v.isEmail(value)){
-                throw new Error("Email is invalid")
-            }else{
-                const checkEmail = await ProfilesModel.findOne({email:value})
-                if(checkEmail){
-                    throw new Error ("Email already exists")
-                }
-            }
-        }
+        // validator: async(value)=>{
+        //     if(!v.isEmail(value)){
+        //         throw new Error("Email is invalid")
+        //     }else{
+        //         const checkEmail = await ProfilesModel.findOne({email:value})
+        //         if(checkEmail){
+        //             throw new Error ("Email already exists")
+        //         }
+        //     }
+        // }
     },
     bio:{
         type:String,
@@ -52,16 +52,9 @@ const ProfileSchema =  new Schema({
         required:true,
         unique:true
     },
-    createdAt:{
-     type:Date,
-     default: Date.now
-    },
-    updatedAt: {
-        type:Date,
-        default:Date.now
-    }
+    
        
-})
+}, {timestamps: true})
 
 const ProfilesModel = mongoose.model("Profile", ProfileSchema)
 module.exports = ProfilesModel
