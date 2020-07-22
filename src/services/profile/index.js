@@ -4,6 +4,10 @@ const q2m = require("query-to-mongo")
 const multer = require("multer")
 const path = require("path")
 const fs = require("fs-extra")
+const json2csv = require("json2csv");
+const ExperienceModel = require("../experience/schema");
+const doc = new pdfdocument();
+const { json } = require("express");
 const pdfdocument = require("pdfkit");
 
 const profileRouter = express.Router()
@@ -95,6 +99,7 @@ profileRouter.post("/:id/upload", upload.single("profile"), async (req,res,next)
 })
 
 
+
 // update a new profile
 profileRouter.put("/:id", async(req,res,next)=>{
     try{
@@ -127,5 +132,63 @@ profileRouter.delete("/:id", async(req,res,next)=>{
         next(error)
     }
 })
+
+//create pdf
+profileRouter.get("/:username/pdf", async (req, res, next) => {
+    try {
+      const profile = await ProfilesModel.findOne({
+        username: req.params.username,
+      });
+      const getExperience = await ExperienceModel.find({ username: profile.username });
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${profile.name}.pdf`
+      );
+      const photo = join(imageFilePath, `${profile._id}.png`);
+      doc.pipe(fs.createWriteStream("output.pdf"));
+      doc.font("Times-Roman");
+      doc.fontSize(18);
+      doc.image(photo, 88, 30, {
+        fit: [100, 100],
+      });
+      doc.text(`${profile.name} ${profile.surname}`, {
+        width: 410,
+        align: "center",
+      });
+      doc.text(" ");
+      doc.text("Experiences", {
+        width: 410,
+        align: "center",
+      });
+      doc.fontSize(12);
+      getExp.forEach(
+        (exp) =>
+          doc.text(`
+          Role: ${exp.role}
+          Company: ${exp.company}
+          Starting Date: ${exp.startDate.toString().slice(4, 15)}
+          Ending Date: ${exp.endDate.toString().slice(4, 15)}
+          Description: ${exp.description}
+          Area:  ${exp.area}
+          -------------------------------------------------------
+        `),
+        {
+          width: 410,
+          align: "center",
+        }
+      );
+  
+      // doc.image(imagePath,`${profile._id}.png`, {
+      //   fit: [250, 300],
+      //   align: 'center',
+      //   valign: 'center'
+      // })
+      doc.pipe(res);
+      doc.end();
+    } catch (error) {
+      next(error);
+    }
+  });
+  
 
 module.exports = profileRouter;

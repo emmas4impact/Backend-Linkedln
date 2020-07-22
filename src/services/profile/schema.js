@@ -50,6 +50,7 @@ const ProfileSchema =  new Schema({
     username:{
         type:String,
         required:true,
+        unique:true
     },
     createdAt:{
      type:Date,
