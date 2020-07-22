@@ -192,7 +192,7 @@ profileRouter.post("/", async(req,res,next)=>{
 
 // post an image
 const upload = multer({})
-const imageFilePath = path.join(__dirname, "../../public/img")
+const imageFilePath = path.join(__dirname, "../../public/images/experience")
 profileRouter.post("/:id/upload", upload.single("profile"), async (req,res,next)=>{
     try{
         if(req.file){
@@ -248,7 +248,22 @@ profileRouter.delete("/:id", async(req,res,next)=>{
         next(error)
     }
 })
-
+profileRouter.get("/:username/experience", async (req, res, next) => {
+    try {
+      const id = req.params.id
+      const experience = await ExperienceModel.findOne({'username': req.params.username})
+      if (experience) {
+        res.send(experience)
+      } else {
+        const error = new Error()
+        error.httpStatusCode = 404
+        next(error)
+      }
+    } catch (error) {
+      console.log(error)
+      next("While reading experience list a problem occurred!")
+    }
+  })
 //create pdf
 profileRouter.get("/:username/pdf", async (req, res, next) => {
     try {
@@ -260,8 +275,9 @@ profileRouter.get("/:username/pdf", async (req, res, next) => {
         "Content-Disposition",
         `attachment; filename=${profile.name}.pdf`
       );
-      const photo = join(imageFilePath, `${profile._id}.png`);
-      doc.pipe(fs.createWriteStream("output.pdf"));
+      const doc = new pdfdocument()
+      const photo = path.join(imageFilePath, `${profile._id}.png`);
+      doc.pipe(fs.createWriteStream(path.join(__dirname, "../../public/images/pdf/output.pdf")));
       doc.font("Times-Roman");
       doc.fontSize(18);
       doc.image(photo, 88, 30, {
@@ -277,7 +293,7 @@ profileRouter.get("/:username/pdf", async (req, res, next) => {
         align: "center",
       });
       doc.fontSize(12);
-      getExp.forEach(
+      getExperience.forEach(
         (exp) =>
           doc.text(`
           Role: ${exp.role}
