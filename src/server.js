@@ -23,6 +23,7 @@ const {
 } = require("./errorHandler.js")
 
 const server = express();
+server.use(cors())
 // server.use(express.static(join(__dirname, `../src`)))
 server.use(helmet());
 const port = process.env.PORT || 2250
@@ -42,7 +43,7 @@ server.use(express.static(staticFolderPath))
 if (process.env.NODE_ENV === 'development'){
   server.use(morgan('dev'))
 }
-server.use(cors())
+
 server.use(express.json())
 
 
