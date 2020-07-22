@@ -9,10 +9,6 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require("yamljs")
 const mongoose = require("mongoose")
 const {join}= require("path")
-
-//const problematicRoutes = require("./service/ProblematicRoutes")
-
-
 const cors = require("cors")
 
 const {
@@ -23,6 +19,7 @@ const {
 
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
+server.use(cors());
 server.use(helmet());
 const port = process.env.PORT || 2250
 
@@ -52,7 +49,7 @@ server.use("/api/experience", experienceRouter)
 //     },
 //   }
 
-  server.use(cors())
+
 
 //ERROR HANDLERS
 

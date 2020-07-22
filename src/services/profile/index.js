@@ -19,8 +19,8 @@ profileRouter.get("/", async(req,res,next)=>{
 // get profile with username
 profileRouter.get("/:username", async(req,res,next)=>{
     try{
-        const username = req.params.username
-        const profile = await ProfilesModel.findOne(username)
+        //const username = req.params.username
+        const profile = await ProfilesModel.findOne({'username': req.params.username})
         if(profile){
             res.send(profile)
         }else{
@@ -50,7 +50,7 @@ profileRouter.post("/", async(req,res,next)=>{
 profileRouter.put("/:username", async(req,res,next)=>{
     try{
         const profile = await ProfilesModel.findOneAndUpdate(req.params.username,req.body )
-        if(profle){
+        if(profile){
             res.send("ok")
         }else{
             const error = new Error(`profile with username ${req.params.usernme}not found`)
