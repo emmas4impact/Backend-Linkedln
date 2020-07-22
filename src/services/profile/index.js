@@ -4,6 +4,8 @@ const q2m = require("query-to-mongo")
 const multer = require("multer")
 const path = require("path")
 const fs = require("fs-extra")
+const pdfdocument = require("pdfkit");
+
 const profileRouter = express.Router()
 
 // get profiles
@@ -70,14 +72,14 @@ profileRouter.post("/", async(req,res,next)=>{
 // post an image
 const upload = multer({})
 const imageFilePath = path.join(__dirname, "../../public/img")
-profileRouter.post("/:username/upload", upload.single("profile"), async (req,res,next)=>{
+profileRouter.post("/:id/upload", upload.single("profile"), async (req,res,next)=>{
     try{
         if(req.file){
             await fs.writeFile(
-                path.join(imageFilePath, `${req.params.username}.png`),
+                path.join(imageFilePath, `${req.params.id}.png`),
                 req.file.buffer);
-                const profile = await ProfilesModel.findOneAndUpdate(req.params.username, {
-                    image:`http://127.0.0.1:${process.env.PORT}/img/profile/${req.params.username}.png`,
+                const profile = await ProfilesModel.findOneAndUpdate(req.params.id, {
+                    image:`http://127.0.0.1:${process.env.PORT}/img/profile/${req.params.id}.png`,
                 });
                 res.status(200).send("uploaded")
         }else{

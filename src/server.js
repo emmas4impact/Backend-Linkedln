@@ -19,7 +19,7 @@ const {
 const port = process.env.PORT || 3015
 
 const server = express()
-const staticFolderPath = join(__dirname, "./public")
+const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
 
 // Dev logging middleware

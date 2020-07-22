@@ -3,7 +3,7 @@ const mongoose = require ("mongoose")
 const v = require("validator")
 
 const ProfileSchema =  new Schema({
-    _id:String,
+   
 
     name:{
         type:String,
@@ -52,10 +52,12 @@ const ProfileSchema =  new Schema({
         required:true,
     },
     createdAt:{
-        type:Date, default: Date.now
+     type:Date,
+     default: Date.now
     },
     updatedAt: {
-        type:Date, default:Date.now
+        type:Date,
+        default:Date.now
     }
        
 })
