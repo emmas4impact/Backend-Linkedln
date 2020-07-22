@@ -33,6 +33,7 @@ const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 server.use(loggerMiddleware)
 const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
+console.log(staticFolderPath)
 
 server.use(express.json()) // Built in middleware
 server.use("/api/posts", postRoute)
