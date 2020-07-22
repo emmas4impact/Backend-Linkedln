@@ -159,7 +159,7 @@ paths:
           content:
             text/csv:
               example: asin, title, price, category
-  /experience/{name}/download:
+  /experience/{username}/download:
     get:
       tags:
         - experience

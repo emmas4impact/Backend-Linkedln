@@ -106,33 +106,36 @@ profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, nex
 
 profileRouter.get("/:username/experience", async (req, res, next) => {
     try {
-     const profile = ProfilesModel.find({'username': req.params.username})
-     if(profile){
+     const experience = ExperienceSchema.findOne({'username': req.params.username})
+     if(experience){
+         res.send(experience)
          
      }
-      const experience = await ExperienceSchema.find(req.query)
-      res.send(experience)
+    //  else{
+    //      res.send("wrong username")
+    //  }
+     
     } catch (error) {
       next(error)
     }
   })
   
-  profileRouter.get("/:username/experience/:id", async (req, res, next) => {
-    try {
-      const id = req.params.id
-      const experience = await ExperienceSchema.findById(id)
-      if (experience) {
-        res.send(experience)
-      } else {
-        const error = new Error()
-        error.httpStatusCode = 404
-        next(error)
-      }
-    } catch (error) {
-      console.log(error)
-      next("While reading experience list a problem occurred!")
-    }
-  })
+//   profileRouter.get("/:username/experience/:id", async (req, res, next) => {
+//     try {
+//       const id = req.params.id
+//       const experience = await ExperienceSchema.findById(id)
+//       if (experience) {
+//         res.send(experience)
+//       } else {
+//         const error = new Error()
+//         error.httpStatusCode = 404
+//         next(error)
+//       }
+//     } catch (error) {
+//       console.log(error)
+//       next("While reading experience list a problem occurred!")
+//     }
+//   })
   
   profileRouter.post("/:username/experience",
    async (req, res, next) => {
