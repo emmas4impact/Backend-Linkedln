@@ -30,10 +30,11 @@ const loggerMiddleware = (req, res, next) => {
 
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 
-server.use(express.json()) // Built in middleware
 server.use(loggerMiddleware)
+const staticFolderPath = join(__dirname, "../public")
+server.use(express.static(staticFolderPath))
 
-server.use(express.static(path.join(__dirname, "../public/")))
+server.use(express.json()) // Built in middleware
 server.use("/api/posts", postRoute)
 
 server.use("/api/profile", profileRouter)
