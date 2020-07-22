@@ -41,20 +41,20 @@ server.use("/posts", postRoute)
 
 server.use("/api/profile", profileRouter)
 server.use("/api/experience", experienceRouter)
-const whitelist = ["http://localhost:3000", "http://localhost:3001"]
-const corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== 1) {
-        callback(null, true)
-      } else {
-        callback(new Error("Not allowed by CORS"))
-      }
-    },
-  }
+// const whitelist = ["http://localhost:3000", "http://localhost:3001"]
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//       if (whitelist.indexOf(origin) !== -1) {
+//         callback(null, true)
+//       } else {
+//         callback(new Error("Not allowed by CORS"))
+//       }
+//     },
+//   }
 
-  server.use(cors(corsOptions))
+  server.use(cors())
 
-// // ERROR HANDLERS
+//ERROR HANDLERS
 
 //server.use(notFoundHandler)
 server.use(notFoundHandler)
