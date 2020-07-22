@@ -1,5 +1,6 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
+const { ref } = require("pdfkit")
 
 const ProfileSchema =  new Schema({
     
@@ -45,9 +46,13 @@ const ProfileSchema =  new Schema({
     username:{
         type:String,
         required:true,
+        unique: true
+        
         
     },
-    
+    experience:{
+        type: Schema.Types.ObjectId, ref: 'experience'
+    }
         
 }, {timestamps:true})
 
