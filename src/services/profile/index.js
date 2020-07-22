@@ -3,7 +3,12 @@ const ProfilesModel = require("./schema")
 const ExperienceSchema = require("../experience/schema")
 const profileRouter = express.Router()
 const multer = require("multer")
+const path =require("path")
 const upload = multer({});
+const fs =require("fs-extra")
+const imagePath = path.join(__dirname, "../../../public/images/profile");
+console.log(imagePath)
+const port = process.env.PORT
 
 // get profiles
 
@@ -68,7 +73,7 @@ profileRouter.put("/:username", async(req,res,next)=>{
 // delete aa profile
 profileRouter.delete("/:username", async(req,res,next)=>{
     try{
-        const profile= await ProfilesModel.findOneAndDelete(req.params.username)
+        const profile= await ProfilesModel.findOneAndDelete({'username': req.params.username})
         if(profile){
             res.send("deleted")
         }else{
@@ -80,6 +85,23 @@ profileRouter.delete("/:username", async(req,res,next)=>{
         next(error)
     }
 })
+
+profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, next) => {
+    try {
+      await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
+      req.body = {
+        image: `http://127.0.0.1:${port}/images/post/${req.params.id}.png`
+      }
+      
+      const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
+      if(post){
+          res.send("image uploaded")
+      }
+      
+    } catch (error) {
+      next(error)
+    }
+  })
 //EXPERIENCE
 
 profileRouter.get("/:username/experience", async (req, res, next) => {
