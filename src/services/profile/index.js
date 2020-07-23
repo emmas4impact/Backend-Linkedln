@@ -71,14 +71,14 @@ profileRouter.put("/:username", async(req,res,next)=>{
     }
 })
 
-profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, next) => {
+profileRouter.post("/:username/upload", upload.single("profile"), async (req, res, next) => {
     try {
-      await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
+      await fs.writeFile(path.join(imagePath, `${req.params.username}.png`), req.file.buffer)
       req.body = {
-        image: `https://linkedln-backend.herokuapp.com/images/profile/${req.params.id}.png`
+        image: `https://linkedln-backend.herokuapp.com/images/profile/${req.params.username}.png`
       }
       
-        const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
+        const post =await ProfilesModel.findOneAndUpdate({'username': req.params.username}, req.body)
       if(post){
           res.send("image uploaded")
       }
@@ -223,8 +223,8 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
           content: [
             { text: `${user.username}`, fontSize: 25, background: 'blue', italics: true },
             {
-            //   image: `${path.join(imagePath, `${req.params.username}.jpg`)}`,
-            //   width: 150
+              image: `${path.join(imagePath, `${req.params.username}.png`)}`,
+              width: 150
             },
             "                                                                         ",
             `             Name: ${user.name}`,
@@ -233,14 +233,8 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
             `             Bio: ${user.bio} $`,
             `             Title: ${user.title}`,
             `             Area: ${user.area}`,
-          ],
-          styles:{
-            header: {
-                fontSize: 18,
-                bold: true,
-                background: '#ff1'
-            }
-          }
+          ]
+         
         }
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
         res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
