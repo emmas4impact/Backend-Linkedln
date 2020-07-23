@@ -219,9 +219,10 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
         };
         const printer = new PdfPrinter(fonts);
         const docDefinition = {
-          pageMargins: [150, 50, 150, 50],
+          pageMargins: [20, 10],
           content: [
-            { text: `${user.username}`, fontSize: 25, background: 'blue', italics: true },
+       
+          
             {
             //   image: `${path.join(imagePath, `${req.params.username}.jpg`)}`,
             //   width: 150
@@ -230,19 +231,32 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
             `             Name: ${user.name}`,
             `             Surname: ${user.surname}`,
             `             Email: ${user.email}`,
-            `             Bio: ${user.bio} $`,
+            `             Bio: ${user.bio}`,
             `             Title: ${user.title}`,
             `             Area: ${user.area}`,
-          ],
-          styles:{
-            header: {
-                fontSize: 18,
-                bold: true,
-                background: '#ff1'
-            }
-          }
+          ]
         }
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
+        pdfDoc
+         
+           .fill('grey')
+           .fontSize(10) 
+           .text('This is information about the user!', 200, 10, {letterSpacing: '3px'});
+        
+          //  pdfDoc
+          //  .fill('black')
+          //  .text(`Name: ${user.name}`, 20, 10)
+          //  .text(` Surname: ${user.surname}`, 20, 20)
+          //  .text(` Email: ${user.email}`, 20, 30)
+          //  .text(` Bio: ${user.bio}`, 20, 40)
+          //  .text(` Title: ${user.title}`, 20, 50)
+          //  .text(`Area: ${user.area}`, 20, 60);
+        pdfDoc
+           .save()
+           .moveTo(100, 150)
+           .lineTo(100, 250)
+           .lineTo(200, 250)
+           .fill('grey'); 
         res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
         res.contentType("application/pdf")
         pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
