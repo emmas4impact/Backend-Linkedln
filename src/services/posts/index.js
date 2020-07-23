@@ -46,14 +46,22 @@ postRouter.get("/:username", async (req, res, next) => {
   }
 })
 
-postRouter.post("/",
+postRouter.post("/:username",
  async (req, res, next) => {
   try {
-   
-    const newpost = new postModel(req.body)
-     const { _id } = await newpost.save()
-     res.status(201).send(_id)
-     
+    const post= await postModel.findOne({ 'username': req.params.username })
+    if(post){
+        const newpost = new postModel(req.body)
+        req.body = {
+            username: req.params.username
+          }
+      
+        await newpost.save()
+         res.status(201).send(newpost)
+         
+        
+    }
+    
      
    } catch (error) {
      next(error)
