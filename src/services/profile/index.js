@@ -74,7 +74,7 @@ profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, nex
     try {
       await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
       req.body = {
-        image: `/images/profile/${req.params.id}.png`
+        image: `https://linkedln-backend.herokuapp.com/images/profile/${req.params.id}.png`
       }
       
         const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
