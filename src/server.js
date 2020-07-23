@@ -10,7 +10,7 @@ const YAML = require("yamljs")
 const mongoose = require("mongoose")
 const {join}= require("path")
 const cors = require("cors")
-
+const staticFolderPath = path.join(__dirname, "../public")
 const {
     badRequestHandler,
     notFoundHandler,
@@ -31,7 +31,7 @@ const loggerMiddleware = (req, res, next) => {
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
 
 server.use(loggerMiddleware)
-const staticFolderPath = join(__dirname, "../public")
+
 server.use(express.static(staticFolderPath))
 console.log(staticFolderPath)
 
