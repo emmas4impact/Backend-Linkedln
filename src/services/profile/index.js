@@ -54,10 +54,11 @@ profileRouter.post("/", async(req,res,next)=>{
     }
 })
 
+//tested ok
 // update a new profile
 profileRouter.put("/:username", async(req,res,next)=>{
     try{
-        const profile = await ProfilesModel.findOneAndUpdate(req.params.username,req.body )
+        const profile = await ProfilesModel.findOneAndUpdate({'username': req.params.username},req.body )
         if(profile){
             res.send("ok")
         }else{
@@ -106,25 +107,45 @@ profileRouter.delete("/:username", async(req,res,next)=>{
 
 
 //EXPERIENCE
-
+//tested ok!
 profileRouter.get("/:username/experience", async (req, res, next) => {
     try {
-     const experience = ExperienceSchema.findOne({'username': req.params.username})
+     //const experience = ExperienceSchema.find({'username': req.params.username})
+     const experience = await ExperienceSchema.find({'username': req.params.username})
+     console.log(experience)
      if(experience){
          res.send(experience)
-         
+        
      }
-    //  else{
-    //      res.send("wrong username")
-    //  }
+     else{
+         res.send("wrong username")
+     }
      
     } catch (error) {
       next(error)
     }
   })
   
+  //tested ok
+  profileRouter.get("/:username/experience/:id", async (req, res, next) => {
+    try {
+     //const experience = ExperienceSchema.find({'username': req.params.username})
+     const experience = await ExperienceSchema.findById(req.params.id)
+     console.log(experience)
+     if(experience){
+         res.send(experience)
+        
+     }
+     else{
+         res.send("wrong username")
+     }
+     
+    } catch (error) {
+      next(error)
+    }
+  })
 
-  
+  //tested ok!
   profileRouter.post("/:username/experience",
    async (req, res, next) => {
     try {
@@ -138,6 +159,8 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
        next(error)
      }
   })
+  
+  //tested ok!
   
   profileRouter.post("/:username/experience/csv", async (req, res, next) => {
     try {
@@ -156,7 +179,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
      }
   })
   
-  
+  //tested ok!
   profileRouter.post("/:username/experience/:id/upload", upload.single("experience"), async (req, res, next) => {
     try {
       await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
@@ -173,7 +196,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
       next(error)
     }
   })
-   
+   //tested ok!
   profileRouter.put("/:username/experience/:id", async (req, res, next) => {
     try {
       const experience = await ExperienceSchema.findByIdAndUpdate(req.params.id, req.body)
@@ -190,6 +213,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
     }
   })
   
+  //tested ok
   profileRouter.delete("/:username/experience/:id", async (req, res, next) => {
     try {
       const experience = await ExperienceSchema.findByIdAndDelete(req.params.id)
@@ -205,6 +229,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
     }
   })
   
+  //tested ok
   profileRouter.get('/:username/cv', async (req, res, next) => {
     try {
       const user = await ProfilesModel.findOne({ 'username': req.params.username })
