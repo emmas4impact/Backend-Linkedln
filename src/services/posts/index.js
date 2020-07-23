@@ -29,10 +29,10 @@ postRouter.get("/", async (req, res, next) => {
   }
 })
 
-postRouter.get("/:id", async (req, res, next) => {
+postRouter.get("/:username", async (req, res, next) => {
   try {
-    const id = req.params.id
-    const post = await postModel.findById(id)
+   // const id = req.params.id
+    const post = await postModel.findOne({'username': req.params.username})
     if (post) {
       res.send(post)
     } else {
@@ -95,7 +95,7 @@ postRouter.post("/:id/upload", upload.single("post"), async (req, res, next) => 
     try {
       await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
       req.body = {
-        image: `http://127.0.0.1:${port}/images/post/${req.params.id}.png`
+        image: `https://linkedln-backend.herokuapp.com/images/post/${req.params.id}.png`
       }
       
       const post =await postModel.findByIdAndUpdate(req.params.id, req.body)

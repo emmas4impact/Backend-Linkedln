@@ -122,22 +122,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
     }
   })
   
-//   profileRouter.get("/:username/experience/:id", async (req, res, next) => {
-//     try {
-//       const id = req.params.id
-//       const experience = await ExperienceSchema.findById(id)
-//       if (experience) {
-//         res.send(experience)
-//       } else {
-//         const error = new Error()
-//         error.httpStatusCode = 404
-//         next(error)
-//       }
-//     } catch (error) {
-//       console.log(error)
-//       next("While reading experience list a problem occurred!")
-//     }
-//   })
+
   
   profileRouter.post("/:username/experience",
    async (req, res, next) => {
@@ -175,7 +160,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
     try {
       await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
       req.body = {
-        image: `http://127.0.0.1:${port}/images/experience${req.params.id}.png`
+        image: `https://linkedln-backend.herokuapp.com/images/experience/${req.params.id}.png`
       }
       
       const post =await ExperienceSchema.findByIdAndUpdate(req.params.id, req.body)

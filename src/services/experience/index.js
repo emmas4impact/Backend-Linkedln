@@ -58,7 +58,7 @@ experienceRouter.post("/csv", async (req, res, next) => {
      //res.status(201).send(_id)
      
      const json2csv = new Transform( {fields:['_id', 'role', 'company', 'startDate', 'endDate', 'description', 'area','username','image', 'createdAt','updatedAt']})
-     const fieldNames =['_id', 'role', 'company', 'startDate', 'endDate', 'description', 'area','username','image', 'createdAt','updatedAt']
+    
      const data =json2csv({data: newExperience, fields: fields, fieldNames: fieldNames}) 
      res.attachment('filename.csv');
      res.status(200).send(data);
@@ -72,7 +72,7 @@ experienceRouter.post("/:id/upload", upload.single("experience"), async (req, re
   try {
     await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
     req.body = {
-      image: `http://127.0.0.1:${port}/images/experience${req.params.id}.png`
+      image: `https://linkedln-backend.herokuapp.com/images/experience${req.params.id}.png`
     }
     
     const post =await ExperienceSchema.findByIdAndUpdate(req.params.id, req.body)
