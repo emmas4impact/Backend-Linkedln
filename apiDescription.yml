@@ -87,7 +87,7 @@ paths:
       summary: Update
       parameters:
         - in: path
-          name: id
+          name: username
           required: true
           schema:
             type: string
@@ -153,6 +153,150 @@ paths:
     get:
       tags:
         - Profile
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv:
+              example: _id, name, surname, email, title, area, image, username, bio
+paths:
+  /api/experience:
+    get:
+      tags:
+        - experience
+      summary: Returns a list of user experience.
+      description: list of student and their basic info
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          description: Filter experience list by username
+      responses:
+        "200": # status code
+          description: A list of experience
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags:
+        - experience
+      description: Adds a new book
+      requestBody:
+        description: The object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/experience"
+      responses:
+        "201": # status code
+          description: The ID of the newly created book
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/experience/{id}:
+    get:
+      tags:
+        - experience
+      summary: experience section
+      description: Retrieve single experience
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the experience to retrieve
+      responses:
+        "200": # status code
+          description: The single Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      tags:
+        - experience
+      description: Update an existing experience
+      summary: Update
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Book to update
+      requestBody:
+        description: Fields to update
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Profile"
+      responses:
+        "200": # status code
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - experience
+      description: Delete a specific Book by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the experience to delete
+      responses:
+        "200": # status code
+          description: The single Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /experience/id/upload:
+    post:
+      tags:
+        - experience
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200": # status code
+          description: The single user
+          content:
+            application/json:
+              "404":
+          $ref: "#/components/responses/NotFound"
+  /Profile/export/csv:
+    get:
+      tags:
+        - experience
       responses:
         "200":
           description: OK
