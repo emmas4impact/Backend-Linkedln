@@ -70,6 +70,23 @@ profileRouter.put("/:username", async(req,res,next)=>{
     }
 })
 
+profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, next) => {
+    try {
+      await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
+      req.body = {
+        image: `/images/profile/${req.params.id}.png`
+      }
+      
+        const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
+      if(post){
+          res.send("image uploaded")
+      }
+      
+    } catch (error) {
+      next(error)
+    }
+  })
+
 // delete aa profile
 profileRouter.delete("/:username", async(req,res,next)=>{
     try{
@@ -86,22 +103,7 @@ profileRouter.delete("/:username", async(req,res,next)=>{
     }
 })
 
-profileRouter.post("/:id/upload", upload.single("profile"), async (req, res, next) => {
-    try {
-      await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
-      req.body = {
-        image: `https://linkedln-backend.herokuapp.com/images/post/${req.params.id}.png`
-      }
-      
-      const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
-      if(post){
-          res.send("image uploaded")
-      }
-      
-    } catch (error) {
-      next(error)
-    }
-  })
+
 //EXPERIENCE
 
 profileRouter.get("/:username/experience", async (req, res, next) => {
