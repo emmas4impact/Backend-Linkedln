@@ -243,7 +243,7 @@ components:
         username:
           type: string
         user:
-          type: object
+          $ref: "#/components/schemas/Profile"
         image:
           type: string
         

@@ -12,9 +12,9 @@ const pdfdocument = require("pdfkit");
 const { profile } = require("console")
 
 const profileRouter = express.Router()
-
+const port = process.env.PORT
 // get profiles
-
+const imagePath = path.join(__dirname, "../../../public/images/profile");
 profileRouter.get("/", async(req,res,next)=>{
     try{
         const profiles = await ProfilesModel.find(req.query).populate('experience')
@@ -191,23 +191,18 @@ profileRouter.post("/", async(req,res,next)=>{
 })
 
 // post an image
-const upload = multer({})
-const imageFilePath = path.join(__dirname, "../../public/images/experience")
+
+
 profileRouter.post("/:id/upload", upload.single("profile"), async (req,res,next)=>{
-    try{
-        if(req.file){
-            await fs.writeFile(
-                path.join(imageFilePath, `${req.params.id}.png`),
-                req.file.buffer);
-                const profile = await ProfilesModel.findOneAndUpdate(req.params.id, {
-                    image:`http://127.0.0.1:${process.env.PORT}/img/profile/${req.params.id}.png`,
-                });
-                res.status(200).send("uploaded")
-        }else{
-            const error = new Error()
-            error.httpstatusCode=400;
-            error.message= "image file is missing"
-            next(error)
+    try {
+        await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
+        req.body = {
+          image: `http://127.0.0.1:${port}/images/experience/${req.params.id}.png`
+        }
+        
+        const post =await ProfilesModel.findByIdAndUpdate(req.params.id, req.body)
+        if(post){
+            res.send("image uploaded")
         }
 
     }catch(error){
@@ -250,10 +245,32 @@ profileRouter.delete("/:id", async(req,res,next)=>{
 })
 profileRouter.get("/:username/experience", async (req, res, next) => {
     try {
-      const id = req.params.id
+    //   rs
+    const id = req.params.id
       const experience = await ExperienceModel.findOne({'username': req.params.username})
       if (experience) {
         res.send(experience)
+      } else {
+        const error = new Error()
+        error.httpStatusCode = 404
+        next(error)
+      }
+    } catch (error) {
+      console.log(error)
+      next("While reading experience list a problem occurred!")
+    }
+  })
+
+  profileRouter.post("/:username/experience", async (req, res, next) => {
+    try {
+    //   rs
+    // const id = req.params.id
+      const experience = await ExperienceModel.findOne({'username': req.params.username})
+      if (experience) {
+        const newExperience = new ExperienceSchema(req.body)
+        const { _id } = await newExperience.save()
+        res.status(201).send(_id)
+        
       } else {
         const error = new Error()
         error.httpStatusCode = 404
