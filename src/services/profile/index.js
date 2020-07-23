@@ -219,29 +219,40 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
         };
         const printer = new PdfPrinter(fonts);
         const docDefinition = {
-          pageMargins: [20, 10],
+          pageMargins: [150, 50, 150, 50],
+      
+         
           content: [
-       
-          
+        
+            { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
             {
-            //   image: `${path.join(imagePath, `${req.params.username}.jpg`)}`,
-            //   width: 150
+              image: `${path.join(imagePath, `${req.params.username}.png`)}`,
+              width: 150,
+              style: 'anotherStyle'
             },
-            "                                                                         ",
-            `             Name: ${user.name}`,
-            `             Surname: ${user.surname}`,
-            `             Email: ${user.email}`,
-            `             Bio: ${user.bio}`,
-            `             Title: ${user.title}`,
-            `             Area: ${user.area}`,
-          ]
+            { text: `${user.name}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `${user.surname}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]}
+          
+          ], 
+          styles: {
+            header: {
+              fontSize: 10,
+              bold: true,
+            
+          
+            },
+            anotherStyle: {
+              italics: true,
+              alignment: 'center'
+            }
+          }
         }
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
-        pdfDoc
-         
-           .fill('grey')
-           .fontSize(10) 
-           .text('This is information about the user!', 200, 10, {letterSpacing: '3px'});
+        
         
           //  pdfDoc
           //  .fill('black')
@@ -251,12 +262,12 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
           //  .text(` Bio: ${user.bio}`, 20, 40)
           //  .text(` Title: ${user.title}`, 20, 50)
           //  .text(`Area: ${user.area}`, 20, 60);
-        pdfDoc
-           .save()
-           .moveTo(100, 150)
-           .lineTo(100, 250)
-           .lineTo(200, 250)
-           .fill('grey'); 
+        // pdfDoc
+        //    .save()
+        //    .moveTo(100, 150)
+        //    .lineTo(100, 250)
+        //    .lineTo(200, 250)
+        //    .fill('grey'); 
         res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
         res.contentType("application/pdf")
         pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
