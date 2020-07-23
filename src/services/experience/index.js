@@ -3,7 +3,8 @@ const multer = require("multer")
 const path =require("path")
 const fs =require("fs-extra")
 const ExperienceSchema = require("./schema")
-const json2csv = require('json2csv');
+const {Transform} = require('json2csv');
+const JsonStream = require("JSONStream")
 
 const experienceRouter = express.Router()
 const imagePath = path.join(__dirname, "../../../public/images/experience");
@@ -50,21 +51,27 @@ experienceRouter.post("/",
    }
 })
 
-experienceRouter.post("/csv", async (req, res, next) => {
+experienceRouter.post("/:username/csv", async (req, res, next) => {
+ 
   try {
+    //  const experience = await experienceModel.find({ "username": req.params.username })
+    const experience = await ExperienceSchema.find({ "username": req.params.username }).cursor()
+    console.log(experience)
+    const fields = ["role", "company", "startDate", "endDate", "description",
+      "area", "username", "image", "createdAt", "updatedAt"]
+    const data = { fields }
+    const csv = new Transform(data, experience)
+    // res.setHeader("Content-Disposition", `attachment; filename=experience.csv`)
+    //fs.WriteStream
+    const myStream =  fs.createWriteStream(path.join(__dirname, "../../../public/images/experience/test.csv"))
+    experience.pipe(JsonStream.stringify()).pipe(csv).pipe(myStream)
+
    
-    const newExperience = new ExperienceSchema(req.body)
-     const { _id } = await newExperience.save()
-     //res.status(201).send(_id)
-     
-     const json2csv = new Transform( {fields:['_id', 'role', 'company', 'startDate', 'endDate', 'description', 'area','username','image', 'createdAt','updatedAt']})
-    
-     const data =json2csv({data: newExperience, fields: fields, fieldNames: fieldNames}) 
-     res.attachment('filename.csv');
-     res.status(200).send(data);
-   } catch (error) {
-     next(error)
-   }
+    // csv.pipe(myStream)
+    // res.send(csv)
+  } catch (error) {
+    next(error)
+  }
 })
 
 

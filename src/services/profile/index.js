@@ -5,6 +5,7 @@ const profileRouter = express.Router()
 const multer = require("multer")
 const path =require("path")
 const upload = multer({});
+const PdfPrinter =require("pdfmake")
 const fs =require("fs-extra")
 const imagePath = path.join(__dirname, "../../../public/images/profile");
 console.log(imagePath)
@@ -199,6 +200,57 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
         error.httpStatusCode = 404
         next(error)
       }
+    } catch (error) {
+      next(error)
+    }
+  })
+  
+  profileRouter.get('/:username/cv', async (req, res, next) => {
+    try {
+      const user = await ProfilesModel.findOne({ 'username': req.params.username })
+      if (user) {
+        var fonts = {
+          Roboto: {
+            normal: 'node_modules/roboto-font/fonts/Roboto/roboto-regular-webfont.ttf',
+            bold: 'node_modules/roboto-font/fonts/Roboto/roboto-bold-webfont.ttf',
+            italics: 'node_modules/roboto-font/fonts/Roboto/roboto-italic-webfont.ttf',
+            bolditalics: 'node_modules/roboto-font/fonts/Roboto/roboto-bolditalic-webfont.ttf'
+          }
+        };
+        const printer = new PdfPrinter(fonts);
+        const docDefinition = {
+          pageMargins: [150, 50, 150, 50],
+          content: [
+            { text: `${user.username}`, fontSize: 25, background: 'blue', italics: true },
+            {
+            //   image: `${path.join(imagePath, `${req.params.username}.jpg`)}`,
+            //   width: 150
+            },
+            "                                                                         ",
+            `             Name: ${user.name}`,
+            `             Surname: ${user.surname}`,
+            `             Email: ${user.email}`,
+            `             Bio: ${user.bio} $`,
+            `             Title: ${user.title}`,
+            `             Area: ${user.area}`,
+          ],
+          styles:{
+            header: {
+                fontSize: 18,
+                bold: true,
+                background: '#ff1'
+            }
+          }
+        }
+        const pdfDoc = printer.createPdfKitDocument(docDefinition);
+        res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
+        res.contentType("application/pdf")
+        pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
+        
+        pdfDoc.end()
+        res.send("done")
+      }
+      else res.status(404).send('not found!')
     } catch (error) {
       next(error)
     }
