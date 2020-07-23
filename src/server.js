@@ -16,12 +16,12 @@ const {
     notFoundHandler,
     genericErrorHandler,
 } = require("../src/errorHandler")
-const port = process.env.PORT || 2250
+
 const server = express();
 // server.use(express.static(join(__dirname, `../src`)))
 server.use(cors());
 server.use(helmet());
-
+const port = process.env.PORT || 2250
 
 const loggerMiddleware = (req, res, next) => {
   console.log(`Logged ${req.url} ${req.method} -- ${new Date()}`)
@@ -29,11 +29,10 @@ const loggerMiddleware = (req, res, next) => {
 }
 
 const swaggerDocument = YAML.load(join(__dirname, "../apiDescription.yml"))
+
+server.use(loggerMiddleware)
 const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
-server.use(loggerMiddleware)
-
-
 console.log(staticFolderPath)
 
 server.use(express.json()) // Built in middleware
