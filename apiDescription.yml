@@ -159,37 +159,309 @@ paths:
           content:
             text/csv:
               example: asin, title, price, category
-  /experience/{name}/download:
+  paths:
+  /api/profiles/username/experiences:
+    get:
+      tags:
+        - experiences
+      summary: Returns a list of user experiences for that specific username.
+      description: list of experiences based on the username
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          description: Get users experiences based on the username
+      responses:
+        "200": # status code
+          description: A list of experiences
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+/api/Profile/{username}/experiences:
+    post:
+      tags:
+        - experiences
+      description: Adds a new experience to a specific user
+      requestBody:
+        description: The object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/experience"
+      responses:
+        "201": # status code
+          description: The username of the newly created experience
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/Profile/{username}/experiences/{expId}:
     get:
       tags:
         - experience
+      summary: experience section
+      description: Retrieve single experience for a particular username
       parameters:
         - in: path
-          name: name
+          name: username, expId
           required: true
           schema:
             type: string
+          description: The username of the user and the expId is required
       responses:
-        200:
-          description: OK
+        "200": # status code
+          description: The single experience for that user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+ /api/Profile/{username}/experiences/{expId}
+    put:
+      tags:
+        - experience
+      description: Update an existing experience for a specific username
+      summary: Update
+      parameters:
+        - in: path
+          name: username, expId
+          required: true
+          schema:
+            type: string
+          description: The username and expId of the experience to update
+      requestBody:
+        description: Fields to update
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/experience"
+      responses:
+        "200": # status code
+          description: A single experience to update
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/Profile/{username}/experiences/{expId}
+    delete:
+      tags:
+        - experience
+      description: Delete a specific experience of a specific user
+      parameters:
+        - in: path
+          name: username, expId
+          required: true
+          schema:
+            type: string
+          description: The username of the user and expId are required
+      responses:
+        "200": # status code
+          description: The single experience by username
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/experience"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /Profile/upload:
+  /api/Profile/{username}/experiences/{expId}/picture
+    post:
+      tags:
+        - experience
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200": # status code
+          description: upload a single experience picture based on user
           content:
             img/png:
-              example: >
+              example:>
 components:
   responses:
     NotFound:
-      description: The specific resource was not found
+      description:The specific resource was not found
       content:
         application/json:
+              "404":
+          $ref: "#/components/responses/NotFound"
+  /Profile/export/csv:
+  /api/Profile/{username}/experiences/{expId}/csv
+    get:
+      tags:
+        - experience
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv:
+              example: _id,role,company,startDate,endDate,description,area,username,image
+
+paths:
+  /api/posts:
+    get:
+      tags:
+        - posts
+      summary: Returns a list of posts from users.
+      description: list of posts from all users
+      parameters:
+        - in: query
+          name: username
           schema:
-            $ref: "#/components/schemas/Error"
-    Unauthorized:
-      description: Bearer token missing or invalid
+            type: string
+          description: Returns all posts
+      responses:
+        "200": # status code
+          description: A list of posts
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/posts"
+        "404":
+          $ref: "#/components/responses/NotFound"
+/api/posts
+    post:
+      tags:
+        - post
+      description: creates a new post
+      requestBody:
+        description: The object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post"
+      responses:
+        "201": # status code
+          description: The ID of the newly created post
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/Posts/{postId}:
+    get:
+      tags:
+        - Post
+      summary: Returns a specific post
+      description: Retrieve single post
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: The ID of the post to retrieve
+      responses:
+        "200": # status code
+          description: The single post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/post"
+        "404":
+          $ref: "#/components/responses/NotFound"
+/api/posts/{postId}
+    put:
+      tags:
+        - Post
+      description: Update a specific post
+      summary: Update
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: The ID of the post to update
+      requestBody:
+        description: Fields to update
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post"
+      responses:
+        "200": # status code
+          description: A list of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/posts"
+        "404":
+          $ref: "#/components/responses/NotFound"
+/api/posts/{postId}
+    delete:
+      tags:
+        - posts
+      description: Delete a specific post by postId
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: The ID of the post to delete
+      responses:
+        "200": # status code
+          description: The single post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/post"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /api/posts/{postId}/picture:
+     post:
+      tags:
+        - post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200": # status code
+          description: upload a single post for a user
+          content:
+            img/png:
+              example:>
+components:
+  responses:
+    NotFound:
+      description:The specific resource was not found
       content:
         application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
-  schemas:
+              "404":
+          $ref: "#/components/responses/NotFound"
+ schemas:
     Profile:
       type: object
       properties:
@@ -243,7 +515,7 @@ components:
         username:
           type: string
         user:
-          $ref: "#/components/schemas/Profile"
+           $ref: "#/components/schemas/Profile"
         image:
           type: string
         

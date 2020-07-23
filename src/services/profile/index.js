@@ -192,7 +192,7 @@ profileRouter.post("/", async(req,res,next)=>{
 
 // post an image
 
-
+const upload = multer({})
 profileRouter.post("/:id/upload", upload.single("profile"), async (req,res,next)=>{
     try {
         await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
