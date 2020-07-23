@@ -17,7 +17,7 @@ const profileRouter = express.Router()
 
 profileRouter.get("/", async(req,res,next)=>{
     try{
-        const profiles = await ProfilesModel.find(req.query)
+        const profiles = await ProfilesModel.find(req.query).populate('experience')
         res.status(200).send(profiles)
 
     }catch(error){
@@ -66,7 +66,7 @@ profileRouter.get("/:username", async(req,res,next)=>{
 profileRouter.get("/:username/experiences", async (req, res, next) => {
     try {
       const username = req.params.username
-      const experience = await ExperienceModel.findOne({username:username})
+      const experience = await (await ExperienceModel.findOne({username:username}))
       if (experience) {
         res.send(experience)
       } else {

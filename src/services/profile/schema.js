@@ -1,5 +1,6 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
+const { schema } = require("../posts/schema")
 //const v = require("validator")
 
 const ProfileSchema =  new Schema({
@@ -60,9 +61,10 @@ const ProfileSchema =  new Schema({
         type:Date,
         default:Date.now
     },
+    Experience:[{type:Schema.Types.ObjectId, ref:'experience'}]
     
        
-}, {timestamps: true})
+})
 
 const ProfilesModel = mongoose.model("Profile", ProfileSchema)
 module.exports = ProfilesModel

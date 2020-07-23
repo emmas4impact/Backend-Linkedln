@@ -42,7 +42,7 @@ paths:
     post:
       tags:
         - Profile
-      description: Adds a new book
+      description: Adds a new profile
       requestBody:
         description: The object
         content:
@@ -51,7 +51,7 @@ paths:
               $ref: "#/components/schemas/Profile"
       responses:
         "201": # status code
-          description: The ID of the newly created book
+          description: The ID of the newly created profile
           content:
             application/json:
               schema:
@@ -70,7 +70,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The ID of the Book to retrieve
+          description: The ID of the profile to retrieve
       responses:
         "200": # status code
           description: The single Profile
@@ -91,7 +91,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The ID of the Book to update
+          description: The ID of the profile to update
       requestBody:
         description: Fields to update
         content:
@@ -100,7 +100,7 @@ paths:
               $ref: "#/components/schemas/Profile"
       responses:
         "200": # status code
-          description: A list of books
+          description: A list of profiles
           content:
             application/json:
               schema:
@@ -112,14 +112,14 @@ paths:
     delete:
       tags:
         - Profile
-      description: Delete a specific Book by ID
+      description: Delete a specific profile by ID
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
-          description: The ID of the Book to delete
+          description: The ID of the profile to delete
       responses:
         "200": # status code
           description: The single Profile
