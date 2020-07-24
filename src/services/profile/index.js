@@ -321,7 +321,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
                   { text: `${exp.role}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${exp.company}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${exp.startDate}`, style: [ 'header', 'anotherStyle' ]},
-                  { text: `${exp.endDate}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.endDate.slice(0,10)}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${exp.description}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${exp.image}`, style: [ 'header', 'anotherStyle' ]}
                 
