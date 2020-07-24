@@ -233,8 +233,9 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
   profileRouter.get('/:username/cv', async (req, res, next) => {
     try {
       const user = await ProfilesModel.findOne({ 'username': req.params.username })
-      // const experience = await ExperienceSchema.findOne({'username': req.params.username })
-      if (user) {
+      const experience = await ExperienceSchema.findOne({'username': req.params.username })
+
+      if (user && experience) {
         var fonts = {
           Roboto: {
             normal: 'node_modules/typeface-dosis/files/dosis-latin-200.woff',
@@ -243,112 +244,117 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
             bolditalics: 'node_modules/typeface-dosis/files/dosis-latin-700.woff'
           }
         };
-        const printer = new PdfPrinter(fonts);
-        // const data = [
-        //   `${user.name}`,
-        //   `${user.surname}`,
-        //   `${user.email}`,
-        //   `${user.bio}`,
-        //   `${user.title}`,
-        //   `${user.area}`
-        // ]
-        const docDefinition = {
-          pageMargins: [150, 50, 150, 50],
-          watermark: { text: 'srtive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
 
-          // watermark: { text: 'strive school', color: 'endregion', opacity: 0.3, bold: true, italics: false},
-          // background: [{
-          //     image: 'https://ua.kronospan-express.com/public/files/decors/kronodesign/0/0171.jpg',
-          //     width: 800
-          // }],
-          content: [
+        experience.map(i => {
+          if( i === 0) {
+            const docDefinition = {
+              pageMargins: [150, 50, 150, 50],
+              watermark: { text: 'srtive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
+    
+      
+              content: [
+             
+          
+             
+                { text: `Information about ${user.name}`, style: [ 'middleStyle', 'anotherStyle'] },
+                {
+                  image: `${path.join(imagePath, `${req.params.username}.png`)}`,
+                  width: 150,
+                  style: 'anotherStyle'
+                },
+                { text: `${user.name}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.surname}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
+             
+              
+              
+              ], 
+              styles: {
+                header: {
+                  fontSize: 10,
+                  bold: true,
+                  // background: 'red'
          
-          //   {
-          //     style: 'section',
-          //     table: {
-          //         widths: [ '100'],
-          //         heights: ['100'],
+                },
+                middleStyle :{
+                  fontSize: 20,
+                  bold: true
+                },
+                anotherStyle: {
+                  italics: true,
+                  alignment: 'center'
+                },
+             
                
-          //         body: [
-          //             [ 
-          //                 {
-          //                    text: '',
-          //                   fillColor: '#555555',
-          //                   color: '#00FFFF'
-          //                 }
-          //             ]
-          //         ]
-          //     },
-          //     layout: 'noBorders'
-          // },
+              }
+            }
+          }  else { 
+            const docDefinition = {
+              pageMargins: [150, 50, 150, 50],
+              watermark: { text: 'srtive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
+    
+      
+              content: [
+             
+          
+             
+                { text: `Information about ${user.name}`, style: [ 'middleStyle', 'anotherStyle'] },
+                {
+                  image: `${path.join(imagePath, `${req.params.username}.png`)}`,
+                  width: 150,
+                  style: 'anotherStyle'
+                },
+                { text: `${user.name}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.surname}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
+                
+                { text: `${i.role}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${i.company}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${i.startDate}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${i.endDate}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${i.description}`, style: [ 'header', 'anotherStyle' ]},
+                { text: `${i.image}`, style: [ 'header', 'anotherStyle' ]}
 
-          
-      
+             
+              
+              
+              ], 
+              styles: {
+                header: {
+                  fontSize: 10,
+                  bold: true,
+                  // background: 'red'
          
-            { text: `Information about ${user.name}`, style: [ 'middleStyle', 'anotherStyle'] },
-            {
-              image: `${path.join(imagePath, `${req.params.username}.png`)}`,
-              width: 150,
-              style: 'anotherStyle'
-            },
-            { text: `${user.name}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.surname}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
+                },
+                middleStyle :{
+                  fontSize: 20,
+                  bold: true
+                },
+                anotherStyle: {
+                  italics: true,
+                  alignment: 'center'
+                },
+             
+               
+              }
+            }
          
-          
-          
-          ], 
-          styles: {
-            header: {
-              fontSize: 10,
-              bold: true,
-              // background: 'red'
-     
-            },
-            middleStyle :{
-              fontSize: 20,
-              bold: true
-            },
-            anotherStyle: {
-              italics: true,
-              alignment: 'center'
-            },
-          //   section: {
-         
-          //     color: '#FFFFFF',
-          //     fillColor: '#2361AE',
-          //     margin: [0, 0]
-          // },
-      
-           
           }
-        }
+        })
+
+
+        const printer = new PdfPrinter(fonts);
+       
+        
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
         
-        
-          //  pdfDoc
-          //  .fill('black')
-          //  .text(`Name: ${user.name}`, 20, 10)
-          //  .text(` Surname: ${user.surname}`, 20, 20)
-          //  .text(` Email: ${user.email}`, 20, 30)
-          //  .text(` Bio: ${user.bio}`, 20, 40)
-          //  .text(` Title: ${user.title}`, 20, 50)
-          //  .text(`Area: ${user.area}`, 20, 60);
-        // pdfDoc
-        //    .save()
-        //    .moveTo(100, 150)
-        //    .lineTo(100, 250)
-        //    .lineTo(200, 250)
-        //    .fill('grey'); 
-        // pdfDoc
-        //    .save()
-        //    .moveTo(400, 250)
-        //    .lineTo(400, 350)
-        //    .lineTo(600, 350)
-        //    .fill('grey'); 
+      
         res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
         res.contentType("application/pdf")
         pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
