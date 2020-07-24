@@ -233,59 +233,26 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
   profileRouter.get('/:username/cv', async (req, res, next) => {
     try {
       const user = await ProfilesModel.findOne({ 'username': req.params.username })
-      // const experience = await ExperienceSchema.findOne({'username': req.params.username })
-      if (user) {
+      const experience = await ExperienceSchema.find({'username': req.params.username})
+      
+      if (user && !experience) {
+          
         var fonts = {
           Roboto: {
-            normal: 'node_modules/typeface-dosis/files/dosis-latin-200.woff',
-            bold: 'node_modules/typeface-dosis/files/dosis-latin-600.woff',
-            italics: 'node_modules/typeface-dosis/files/dosis-latin-400.woff',
-            bolditalics: 'node_modules/typeface-dosis/files/dosis-latin-700.woff'
+            normal: 'node_modules/roboto-font/fonts/Roboto/roboto-regular-webfont.ttf',
+            bold: 'node_modules/roboto-font/fonts/Roboto/roboto-bold-webfont.ttf',
+            italics: 'node_modules/roboto-font/fonts/Roboto/roboto-italic-webfont.ttf',
+            bolditalics: 'node_modules/roboto-font/fonts/Roboto/roboto-bolditalic-webfont.ttf'
           }
         };
         const printer = new PdfPrinter(fonts);
-        // const data = [
-        //   `${user.name}`,
-        //   `${user.surname}`,
-        //   `${user.email}`,
-        //   `${user.bio}`,
-        //   `${user.title}`,
-        //   `${user.area}`
-        // ]
         const docDefinition = {
           pageMargins: [150, 50, 150, 50],
-          watermark: { text: 'srtive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
-
-          // watermark: { text: 'strive school', color: 'endregion', opacity: 0.3, bold: true, italics: false},
-          // background: [{
-          //     image: 'https://ua.kronospan-express.com/public/files/decors/kronodesign/0/0171.jpg',
-          //     width: 800
-          // }],
-          content: [
-         
-          //   {
-          //     style: 'section',
-          //     table: {
-          //         widths: [ '100'],
-          //         heights: ['100'],
-               
-          //         body: [
-          //             [ 
-          //                 {
-          //                    text: '',
-          //                   fillColor: '#555555',
-          //                   color: '#00FFFF'
-          //                 }
-          //             ]
-          //         ]
-          //     },
-          //     layout: 'noBorders'
-          // },
-
-          
       
          
-            { text: `Information about ${user.name}`, style: [ 'middleStyle', 'anotherStyle'] },
+          content: [
+        
+            { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
             {
               image: `${path.join(imagePath, `${req.params.username}.png`)}`,
               width: 150,
@@ -296,65 +263,111 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
             { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
             { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
             { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
-            { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
-         
-          
+            { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]}
           
           ], 
           styles: {
             header: {
               fontSize: 10,
               bold: true,
-              // background: 'red'
-     
-            },
-            middleStyle :{
-              fontSize: 20,
-              bold: true
+            
+          
             },
             anotherStyle: {
               italics: true,
               alignment: 'center'
-            },
-          //   section: {
-         
-          //     color: '#FFFFFF',
-          //     fillColor: '#2361AE',
-          //     margin: [0, 0]
-          // },
-      
-           
+            }
           }
         }
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
         
         
-          //  pdfDoc
-          //  .fill('black')
-          //  .text(`Name: ${user.name}`, 20, 10)
-          //  .text(` Surname: ${user.surname}`, 20, 20)
-          //  .text(` Email: ${user.email}`, 20, 30)
-          //  .text(` Bio: ${user.bio}`, 20, 40)
-          //  .text(` Title: ${user.title}`, 20, 50)
-          //  .text(`Area: ${user.area}`, 20, 60);
-        // pdfDoc
-        //    .save()
-        //    .moveTo(100, 150)
-        //    .lineTo(100, 250)
-        //    .lineTo(200, 250)
-        //    .fill('grey'); 
-        // pdfDoc
-        //    .save()
-        //    .moveTo(400, 250)
-        //    .lineTo(400, 350)
-        //    .lineTo(600, 350)
-        //    .fill('grey'); 
         res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
         res.contentType("application/pdf")
         pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
         
         pdfDoc.end()
         res.send("done")
+      }else if(user && experience){
+        var fonts = {
+            Roboto: {
+              normal: 'node_modules/roboto-font/fonts/Roboto/roboto-regular-webfont.ttf',
+              bold: 'node_modules/roboto-font/fonts/Roboto/roboto-bold-webfont.ttf',
+              italics: 'node_modules/roboto-font/fonts/Roboto/roboto-italic-webfont.ttf',
+              bolditalics: 'node_modules/roboto-font/fonts/Roboto/roboto-bolditalic-webfont.ttf'
+            }
+          };
+          const printer = new PdfPrinter(fonts);
+          experience.map(exp => {
+            const docDefinition = {
+                pageMargins: [150, 50, 150, 50],
+            
+              
+                content: [
+              
+                  { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
+                  {
+                    image: `${path.join(imagePath, `${req.params.username}.png`)}`,
+                    width: 150,
+                    style: 'anotherStyle'
+                  },
+                  { text: `${user.name}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${user.surname}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${user.email}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
+                  
+                  { text: `${exp.role}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.company}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.startDate}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.endDate}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.description}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.image}`, style: [ 'header', 'anotherStyle' ]}
+                
+                ], 
+                styles: {
+                  header: {
+                    fontSize: 10,
+                    bold: true,
+                  
+                
+                  },
+                  anotherStyle: {
+                    italics: true,
+                    alignment: 'center'
+                  }
+                }
+              }
+              const pdfDoc = printer.createPdfKitDocument(docDefinition);
+          
+            res.setHeader("Content-Disposition", `attachment; filename=${user.name}.pdf`)
+          res.contentType("application/pdf")
+          pdfDoc.pipe(fs.createWriteStream(path.join(__dirname, `../../../public/pdf/${user.name}.pdf`)))
+          
+          pdfDoc.end()
+          res.send("done")
+          })
+         
+          
+          
+            //  pdfDoc
+            //  .fill('black')
+            //  .text(`Name: ${user.name}`, 20, 10)
+            //  .text(` Surname: ${user.surname}`, 20, 20)
+            //  .text(` Email: ${user.email}`, 20, 30)
+            //  .text(` Bio: ${user.bio}`, 20, 40)
+            //  .text(` Title: ${user.title}`, 20, 50)
+            //  .text(`Area: ${user.area}`, 20, 60);
+          // pdfDoc
+          //    .save()
+          //    .moveTo(100, 150)
+          //    .lineTo(100, 250)
+          //    .lineTo(200, 250)
+          //    .fill('grey'); 
+          
+        
+          
       }
       else res.status(404).send('not found!')
     } catch (error) {
