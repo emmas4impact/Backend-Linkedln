@@ -6,7 +6,7 @@ const postModel = require("./schema")
 const path =require("path")
 const fs =require("fs-extra")
 const postRouter = express.Router()
-
+const profileSchema = require("../profile/schema")
 const q2m = require("query-to-mongo")
 const port = process.env.PORT
 const imagePath = path.join(__dirname, "../../../public/images/post");
@@ -50,18 +50,22 @@ postRouter.post("/:username",
  async (req, res, next) => {
   try {
     const post= await postModel.findOne({ 'username': req.params.username })
+    const profileId= await profileSchema.findOne({'username':  req.params.username}).populate('user')
+    if(post&&profileId){
+       
     
-    if(post){
-        
-        const newpost = new postModel({...req.body, username: `${req.params.username}`})
-        // req.body = {
-        //     username:`${req.params.username}`
-        //   }
+            const newpost = new postModel({...req.body, username: `${req.params.username}`, user: `${profileId._id}`} )
+            // req.body = {
+            //     username:`${req.params.username}`
+            //   }
+          
+            await newpost.save()
+             res.status(201).send(newpost)
+             
+            
+            
       
-        await newpost.save()
-         res.status(201).send(newpost)
-         
-        
+       
     }
     
      
