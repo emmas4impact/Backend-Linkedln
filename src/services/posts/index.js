@@ -110,7 +110,8 @@ postRouter.post("/:username/upload", upload.single("post"), async (req, res, nex
       
       const post =await postModel.findOne({'username': req.params.username}, req.body)
       if(post){
-          res.send("image uploaded")
+          
+          res.send("image uploaded")  
       }
       
     } catch (error) {
