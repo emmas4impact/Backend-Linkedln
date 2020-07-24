@@ -218,13 +218,47 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
           }
         };
         const printer = new PdfPrinter(fonts);
+        // const data = [
+        //   `${user.name}`,
+        //   `${user.surname}`,
+        //   `${user.email}`,
+        //   `${user.bio}`,
+        //   `${user.title}`,
+        //   `${user.area}`
+        // ]
         const docDefinition = {
           pageMargins: [150, 50, 150, 50],
+          // watermark: { text: 'strive school', color: 'endregion', opacity: 0.3, bold: true, italics: false},
+          // background: [{
+          //     image: 'https://ua.kronospan-express.com/public/files/decors/kronodesign/0/0171.jpg',
+          //     width: 800
+          // }],
+          content: [
+           
+         
+          //   {
+          //     style: 'section',
+          //     table: {
+          //         widths: [ '100'],
+          //         heights: ['100'],
+               
+          //         body: [
+          //             [ 
+          //                 {
+          //                    text: '',
+          //                   fillColor: '#555555',
+          //                   color: '#00FFFF'
+          //                 }
+          //             ]
+          //         ]
+          //     },
+          //     layout: 'noBorders'
+          // },
+
+          
       
          
-          content: [
-        
-            { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
+            { text: `Information about ${user.name}`, style: [ 'middleStyle', 'anotherStyle'] },
             {
               image: `${path.join(imagePath, `${req.params.username}.png`)}`,
               width: 150,
@@ -242,13 +276,25 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
             header: {
               fontSize: 10,
               bold: true,
-            
-          
+              // background: 'red'
+     
+            },
+            middleStyle :{
+              fontSize: 20,
+              bold: true
             },
             anotherStyle: {
               italics: true,
               alignment: 'center'
-            }
+            },
+          //   section: {
+         
+          //     color: '#FFFFFF',
+          //     fillColor: '#2361AE',
+          //     margin: [0, 0]
+          // },
+      
+           
           }
         }
         const pdfDoc = printer.createPdfKitDocument(docDefinition);
