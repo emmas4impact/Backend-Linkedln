@@ -37,6 +37,7 @@
     "roboto": "^0.8.2",
     "roboto-font": "^0.1.0",
     "swagger-ui-express": "^4.1.4",
+    "typeface-dosis": "^1.1.4",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

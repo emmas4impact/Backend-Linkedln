@@ -46,14 +46,24 @@ postRouter.get("/:username", async (req, res, next) => {
   }
 })
 
-postRouter.post("/",
+postRouter.post("/:username",
  async (req, res, next) => {
   try {
-   
-    const newpost = new postModel(req.body)
-     const { _id } = await newpost.save()
-     res.status(201).send(_id)
-     
+    const post= await postModel.findOne({ 'username': req.params.username })
+    
+    if(post){
+        
+        const newpost = new postModel({...req.body, username: `${req.params.username}`})
+        // req.body = {
+        //     username:`${req.params.username}`
+        //   }
+      
+        await newpost.save()
+         res.status(201).send(newpost)
+         
+        
+    }
+    
      
    } catch (error) {
      next(error)
@@ -91,16 +101,15 @@ postRouter.delete("/:id", async (req, res, next) => {
   }
 })
 
-postRouter.post("/:id/upload", upload.single("post"), async (req, res, next) => {
+postRouter.post("/:userId/upload", upload.single("post"), async (req, res, next) => {
     try {
-      await fs.writeFile(path.join(imagePath, `${req.params.id}.png`), req.file.buffer)
-      req.body = {
-        image: `https://linkedln-backend.herokuapp.com/images/post/${req.params.id}.png`
-      }
-      
-      const post =await postModel.findByIdAndUpdate(req.params.id, req.body)
+      await fs.writeFile(path.join(imagePath, `${req.params.userId}.png`), req.file.buffer)
+      const post =await postModel.findByIdAndUpdate(req.params.userId, 
+                                                   { image: `https://linkedln-backend.herokuapp.com/images/post/${req.params.userId}.png`
+                                                     })
       if(post){
-          res.send("image uploaded")
+          
+          res.send("image uploaded")  
       }
       
     } catch (error) {
