@@ -306,7 +306,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
               
                 content: [
               
-                  { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle', 'heading' ]},
                   {
                     image: `${path.join(imagePath, `${req.params.username}.png`)}`,
                     width: 150,
@@ -318,18 +318,25 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
                   { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `Experience: `, style: ['heading'] },
                   
-                  { text: `Role: ${exp.role}`, style: [ 'header', 'anotherStyle', 'leftStyle' ]},
-                  { text: `Company: ${exp.company}`, style: [ 'header', 'anotherStyle', 'leftStyle' ]},
-                  { text: `Start Date: ${exp.startDate}`, style: [ 'header', 'anotherStyle', 'leftStyle' ]},
-                  { text: `End Date: ${exp.endDate}`, style: [ 'header', 'anotherStyle', 'leftStyle' ]},
-                  { text: `Description: ${exp.description}`, style: [ 'header', 'anotherStyle', 'leftStyle' ]},
+                  { text: `Role:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
+                  { text: `${exp.role}`, style: [ 'normalStyle', 'leftStyle']},
+                  { text: `Company:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
+                  { text: `${exp.company}`, style: [ 'normalStyle', 'leftStyle']},
+                  // { text: `Start Date:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
+                  // { text: `${exp.startDate}`, style: [ 'normalStyle', 'leftStyle']},
+                  // { text: `End Date:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
+                  // { text: `${exp.endDate}`, style: [ 'normalStyle', 'leftStyle']},
+                  { text: `Description:`, style: [ 'header', 'anotherStyle', 'leftStyle' , 'underlineStyle']},
+                  { text: `${exp.description}`, style: [ 'normalStyle', 'leftStyle']}
                 
                 ], 
                 styles: {
                   header: {
                     fontSize: 20,
                     bold: true,
+                
                   
                 
                   },
@@ -340,6 +347,19 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
                   leftStyle: {
                     italics: true,
                     alignment: 'left'
+                  },
+                  normalStyle: {
+                    normal: true, 
+                    bold: true
+                  }, 
+                  underlineStyle : {
+                    decoration: 'underline'
+                  },
+                  heading : {
+                    alignment: 'center', 
+                    fontSize: 30,
+                    bold: true,
+                    margin: 20
                   }
                 }
               }
