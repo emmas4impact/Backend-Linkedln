@@ -248,7 +248,7 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
         const printer = new PdfPrinter(fonts);
         const docDefinition = {
           pageMargins: [150, 50, 150, 50],
-          watermark: { text: 'strive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
+      
          
           content: [
         
@@ -291,22 +291,21 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
       }else if(user && experience){
         var fonts = {
             Roboto: {
-              normal: 'node_modules/typeface-dosis/files/dosis-latin-200.woff',
-              bold: 'node_modules/typeface-dosis/files/dosis-latin-700.woff',
-              italics: 'node_modules/typeface-dosis/files/dosis-latin-500.woff',
-              bolditalics: 'node_modules/typeface-dosis/files/dosis-latin-400.woff'
+              normal: 'node_modules/roboto-font/fonts/Roboto/roboto-regular-webfont.ttf',
+              bold: 'node_modules/roboto-font/fonts/Roboto/roboto-bold-webfont.ttf',
+              italics: 'node_modules/roboto-font/fonts/Roboto/roboto-italic-webfont.ttf',
+              bolditalics: 'node_modules/roboto-font/fonts/Roboto/roboto-bolditalic-webfont.ttf'
             }
           };
           const printer = new PdfPrinter(fonts);
           experience.map(exp => {
             const docDefinition = {
                 pageMargins: [150, 50, 150, 50],
-                watermark: { text: 'strive school', color: 'grey', opacity: 0.3, bold: true, italics: false },
-
+            
               
                 content: [
               
-                  { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle', 'heading' ]},
+                  { text: `This is information about ${user.name}`, style: [ 'header', 'anotherStyle' ]},
                   {
                     image: `${path.join(imagePath, `${req.params.username}.png`)}`,
                     width: 150,
@@ -318,48 +317,25 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
                   { text: `${user.bio}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${user.title}`, style: [ 'header', 'anotherStyle' ]},
                   { text: `${user.area}`, style: [ 'header', 'anotherStyle' ]},
-                  { text: `Experience: `, style: ['heading'] },
                   
-                  { text: `Role:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
-                  { text: `${exp.role}`, style: [ 'normalStyle', 'leftStyle']},
-                  { text: `Company:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
-                  { text: `${exp.company}`, style: [ 'normalStyle', 'leftStyle']},
-                  // { text: `Start Date:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
-                  // { text: `${exp.startDate}`, style: [ 'normalStyle', 'leftStyle']},
-                  // { text: `End Date:`, style: [ 'header', 'anotherStyle', 'leftStyle', 'underlineStyle' ]},
-                  // { text: `${exp.endDate}`, style: [ 'normalStyle', 'leftStyle']},
-                  { text: `Description:`, style: [ 'header', 'anotherStyle', 'leftStyle' , 'underlineStyle']},
-                  { text: `${exp.description}`, style: [ 'normalStyle', 'leftStyle']}
+                  { text: `${exp.role}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.company}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.startDate}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.endDate}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.description}`, style: [ 'header', 'anotherStyle' ]},
+                  { text: `${exp.image}`, style: [ 'header', 'anotherStyle' ]}
                 
                 ], 
                 styles: {
                   header: {
-                    fontSize: 20,
+                    fontSize: 10,
                     bold: true,
-                
                   
                 
                   },
                   anotherStyle: {
                     italics: true,
                     alignment: 'center'
-                  },
-                  leftStyle: {
-                    italics: true,
-                    alignment: 'left'
-                  },
-                  normalStyle: {
-                    normal: true, 
-                    bold: true
-                  }, 
-                  underlineStyle : {
-                    decoration: 'underline'
-                  },
-                  heading : {
-                    alignment: 'center', 
-                    fontSize: 30,
-                    bold: true,
-                    margin: 20
                   }
                 }
               }
@@ -374,7 +350,22 @@ profileRouter.get("/:username/experience", async (req, res, next) => {
           })
          
           
-        
+          
+            //  pdfDoc
+            //  .fill('black')
+            //  .text(`Name: ${user.name}`, 20, 10)
+            //  .text(` Surname: ${user.surname}`, 20, 20)
+            //  .text(` Email: ${user.email}`, 20, 30)
+            //  .text(` Bio: ${user.bio}`, 20, 40)
+            //  .text(` Title: ${user.title}`, 20, 50)
+            //  .text(`Area: ${user.area}`, 20, 60);
+          // pdfDoc
+          //    .save()
+          //    .moveTo(100, 150)
+          //    .lineTo(100, 250)
+          //    .lineTo(200, 250)
+          //    .fill('grey'); 
+          
         
           
       }
