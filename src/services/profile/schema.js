@@ -1,12 +1,16 @@
 const {Schema} = require ("mongoose")
 const mongoose = require ("mongoose")
-const { ref } = require("pdfkit")
+//const v = require("validator")
 
 const ProfileSchema =  new Schema({
-    
+   
+
     name:{
         type:String,
         required:true,
+        unique:true,
+        trim:true,
+    
     },
     surname:{
       type:String,
@@ -15,21 +19,21 @@ const ProfileSchema =  new Schema({
     email:{
         type:String,
         required:true,
-        lowercase:true,
-        validator: async(value)=>{
-            if(!v.isEmail(value)){
-                throw new Error("Email is invalid")
-            }else{
-                const checkEmail = await ProfilesModel.findOne({email:value})
-                if(checkEmail){
-                    throw new Error ("Email already exists")
-                }
-            }
-        }
+        // validator: async(value)=>{
+        //     if(!v.isEmail(value)){
+        //         throw new Error("Email is invalid")
+        //     }else{
+        //         const checkEmail = await ProfilesModel.findOne({email:value})
+        //         if(checkEmail){
+        //             throw new Error ("Email already exists")
+        //         }
+        //     }
+        // }
     },
     bio:{
         type:String,
-        required:true,
+        required:[true, 'please add a bio'],
+        maxlength:[500, 'Bio cannot be more than 500 characters']
     },
     title:{
         type:String,
@@ -46,15 +50,13 @@ const ProfileSchema =  new Schema({
     username:{
         type:String,
         required:true,
-        unique: true
-        
-        
+        unique:true
     },
     experience:{
         type: Schema.Types.ObjectId, ref: 'experience'
     }
-        
-}, {timestamps:true})
+       
+}, {timestamps: true})
 
 const ProfilesModel = mongoose.model("Profile", ProfileSchema)
-module.exports = ProfilesModel;
+module.exports = ProfilesModel
