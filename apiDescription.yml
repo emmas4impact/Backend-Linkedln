@@ -91,7 +91,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The ID of the Book to update
+          description: The username of the Book to update
       requestBody:
         description: Fields to update
         content:
