@@ -66,7 +66,7 @@ profileRouter.get("/:username", async(req,res,next)=>{
 profileRouter.get("/:username/experiences", async (req, res, next) => {
     try {
       const username = req.params.username
-      const experience = await (await ExperienceModel.findOne({username:username}))
+      const experience = await  ExperienceModel.findOne({username:username})
       if (experience) {
         res.send(experience)
       } else {

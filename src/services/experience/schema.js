@@ -33,7 +33,7 @@ const ExperienceSchema = new Schema({
     unique: true
   },
   image: {
-      type: String,
+      type: buffer,
       required: true
   }
 },{timestamps: true})
