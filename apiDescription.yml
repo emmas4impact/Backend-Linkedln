@@ -4,9 +4,9 @@ info:
   description: Linkedln-Backend API
   version: 1.0.0
 servers:
-  - url: http://localhost:3001
+  - url: http://localhost:3002
     description: Local server
-  - url: https://linkedln-backend.herokuapp.com
+  - url: https://linkedln-backends.herokuapp.com/api/
     description: Cloud server
 tags:
   - name: profile
@@ -112,14 +112,14 @@ paths:
     delete:
       tags:
         - Profile
-      description: Delete a specific Book by ID
+      description: Delete a specific user by ID
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
-          description: The ID of the Book to delete
+          description: The ID of the User to delete
       responses:
         "200": # status code
           description: The single Profile
@@ -155,7 +155,7 @@ paths:
         - Profile
       responses:
         "200":
-          description: OK
+          description: Get the user profile in csv format
           content:
             text/csv:
               example: _id, name, surname, email, title, area, image, username, bio
@@ -165,7 +165,7 @@ paths:
       tags:
         - experience
       summary: Returns a list of user experience.
-      description: list of student and their basic info
+      description: list of profile and their work experience
       parameters:
         - in: query
           name: username
@@ -186,7 +186,7 @@ paths:
     post:
       tags:
         - experience
-      description: Adds a new book
+      description: Adds a new experience
       requestBody:
         description: The object
         content:
@@ -195,7 +195,7 @@ paths:
               $ref: "#/components/schemas/experience"
       responses:
         "201": # status code
-          description: The ID of the newly created book
+          description: The ID of the newly created experience
           content:
             application/json:
               schema:
@@ -235,7 +235,7 @@ paths:
           required: true
           schema:
             type: string
-          description: The ID of the Book to update
+          description: The ID of the User to update
       requestBody:
         description: Fields to update
         content:
@@ -244,7 +244,7 @@ paths:
               $ref: "#/components/schemas/Profile"
       responses:
         "200": # status code
-          description: A list of books
+          description: A list of Users
           content:
             application/json:
               schema:
@@ -256,7 +256,7 @@ paths:
     delete:
       tags:
         - experience
-      description: Delete a specific Book by ID
+      description: Delete a specific experience by ID
       parameters:
         - in: path
           name: id
@@ -288,7 +288,7 @@ paths:
                   format: binary
       responses:
         "200": # status code
-          description: The single user
+          description: The single upload on the profile
           content:
             application/json:
               "404":
